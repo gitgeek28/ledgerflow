@@ -65,8 +65,11 @@ class OllamaClient:
             r = httpx.get(f"{self.url}/api/tags", timeout=2.0)
             r.raise_for_status()
             names = [m.get("name", "") for m in r.json().get("models", [])]
-            available = any(n == self.model or n.startswith(self.model + ":") for n in names)
-            return {"reachable": True, "model": self.model, "model_available": available}
+            match = next((n for n in names if n == self.model), None) or \
+                next((n for n in names if n.startswith(self.model + ":")), None)
+            if match:
+                self.model = match  # resolve e.g. "llama3.2" -> installed tag "llama3.2:3b"
+            return {"reachable": True, "model": self.model, "model_available": bool(match)}
         except (httpx.HTTPError, ValueError) as exc:
             return {"reachable": False, "model": self.model, "model_available": False, "error": str(exc)[:120]}
 
@@ -82,16 +85,32 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip().lower()
 
 
-def _locate(doc: DocumentText, raw: str) -> tuple[int, str, float] | None:
-    """Find the printed value in the document. Returns (page, line text, confidence factor) or None."""
+AMOUNT_IN_TEXT = re.compile(r"\d{1,3}(?:,\d{2,3})+(?:\.\d{1,2})?|\d+\.\d{1,2}|\d{4,}")
+
+
+def _locate(doc: DocumentText, field: str, raw: str, normalised: str) -> tuple[int, str, float] | None:
+    """Find the value on the document. Text fields must appear verbatim; amounts, dates and currency are
+    compared by meaning (same Decimal / same date / same currency marker), never invented.
+    Returns (page, line text, confidence factor) or None."""
     needle = _norm(raw)
-    if len(needle) < 2:
-        return None
     for page in doc.pages:
         for line in page.lines:
-            if needle in _norm(line.text):
+            text = line.text
+            hit = False
+            if field in ("subtotal", "tax_total", "grand_total"):
+                hit = any(parse_amount_text(tok) and str(q2(parse_amount_text(tok)[0])) == normalised
+                          for tok in AMOUNT_IN_TEXT.findall(text))
+            elif field in ("invoice_date", "due_date"):
+                parsed = parse_date(text)
+                hit = bool(parsed and parsed[0].isoformat() == normalised)
+            elif field == "currency":
+                parsed = parse_currency(text)
+                hit = bool(parsed and parsed[0] == normalised)
+            else:
+                hit = len(needle) >= 2 and needle in _norm(text)
+            if hit:
                 factor = 1.0 if page.method == "text" else min(w.conf for w in line.words)
-                return page.number, line.text, factor
+                return page.number, text, factor
     return None
 
 
@@ -136,16 +155,19 @@ def fill_missing_with_llm(doc: DocumentText, result: ExtractionResult, threshold
         report["detail"] = str(exc)[:200]
         return report
     report["duration_ms"] = int((time.perf_counter() - started) * 1000)
+    report["model"] = client.model
     report["status"] = "completed"
     for name in wanted:
         value = getattr(parsed, name)
         if not value:
             continue
         normalised = VALIDATORS[name](value)
-        located = _locate(doc, value)
-        if not normalised or not located:
-            report["rejected"].append({"field": name, "reason": "not found verbatim in document"
-                                       if not located else "failed format validation"})
+        if not normalised:
+            report["rejected"].append({"field": name, "reason": "failed format validation"})
+            continue
+        located = _locate(doc, name, value, normalised)
+        if not located:
+            report["rejected"].append({"field": name, "reason": "value not present in document text"})
             continue
         page, snippet, factor = located
         existing = result.fields[name]
@@ -157,6 +179,6 @@ def fill_missing_with_llm(doc: DocumentText, result: ExtractionResult, threshold
         result.fields[name] = ExtractedField(
             value=normalised, raw=value, method="llm-verified", confidence=round(0.90 * factor, 3),
             evidence=Evidence(page=page, snippet=snippet[:300]),
-            notes=[f"Proposed by local model {settings.ollama_model}; verified verbatim in document text"])
+            notes=[f"Proposed by local model {client.model}; verified against the document text"])
         report["accepted"].append(name)
     return report

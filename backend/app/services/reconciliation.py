@@ -108,6 +108,10 @@ def reconcile(db: Session, *, po: PurchaseOrder | None, line_matches: list[LineM
                                           "invoice held until goods are received", actual="no GRN",
                                           expected="posted GRN"))
 
+    if not lines:
+        rec.checks.append(CheckResult("LINE_ITEM_UNMATCHED", "INDETERMINATE",
+                                      "No line items could be read, so quantities and unit prices cannot be reconciled "
+                                      "against the PO", subject="line items", outcome="REVIEW", severity="REVIEW"))
     by_id = {str(pl.id): pl for pl in po.lines}
     by_inv = {ln.line_number: ln for ln in lines}
     expected_value = D0

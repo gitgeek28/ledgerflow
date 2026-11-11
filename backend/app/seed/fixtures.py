@@ -301,6 +301,27 @@ class Doc:
                 self.text(40, 50, f"Please quote invoice number {self.number} with your remittance.", size=8,
                           color=MUTED)
 
+    def layout_l(self):
+        """Free-form letter: no labelled fields, no table. Rules cannot parse it; a person (or the local model,
+        with verbatim verification) has to."""
+        s, v = self.spec, self.vendor
+        self.banner(1, 1)
+        y = H - 70
+        lines = [
+            (v.legal_name, 13, True), (f"{v.address}   GSTIN {self.gstin}", 8.5, False), ("", 9, False),
+            (f"To: {BUYER['name']}, Pune", 10, False), ("", 9, False),
+            (f"Our ref {self.number} raised on {s.invoice_date.strftime('%d %B %Y')} for services delivered this month.",
+             10, False),
+            (f"Please arrange payment of Rs. {indian(self.printed_grand)} (inclusive of GST) against order "
+             f"{s.po_number}.", 10, False),
+            (f"Taxable value {indian(self.subtotal)} and GST {indian(self.tax)}.", 10, False), ("", 9, False),
+            (f"Remit to {self.bank['bank_name']}, account {self.bank['account']}, IFSC {self.bank['ifsc']}.", 10, False),
+            ("", 9, False), (f"Thank you, {v.legal_name}", 10, False),
+        ]
+        for text, size, bold in lines:
+            self.text(60, y, text, size=size, bold=bold)
+            y -= 20
+
     def layout_c(self):
         s, v = self.spec, self.vendor
         chunks = paginate(self.rows, 20, 36)
@@ -446,6 +467,7 @@ def catalogue_entry(spec: InvoiceSpec) -> dict:
             "po_number": spec.po_number if spec.show_po else None, "currency": "INR",
             "subtotal": str(d.subtotal), "tax_total": str(d.tax), "grand_total": str(d.printed_grand),
             "vendor_gstin": d.gstin, "line_count": len(d.rows), "scanned": spec.scanned,
+            "rules_parseable": spec.layout != "L",
             "lines": [{"description": r.description, "quantity": qty_str(r.qty), "unit_price": str(r.price),
                        "line_subtotal": str(r.taxable)} for r in d.rows],
         }

@@ -1,0 +1,2213 @@
+{
+  "generated_at": "2026-11-11 22:32 UTC",
+  "llm": "none",
+  "metrics": {
+    "header_field_accuracy": "100.0% (216/216)",
+    "line_item_accuracy": "100.0% (72/72)",
+    "vendor_resolution_accuracy": "100.0% (25/25)",
+    "po_matching_accuracy": "100.0% (25/25)",
+    "duplicate_precision": "100.0% (2/2)",
+    "duplicate_recall": "100.0% (2/2)",
+    "final_decision_accuracy": "100.0% (26/26)",
+    "reason_code_accuracy": "100.0% (26/26)",
+    "human_review_routing_accuracy": "100.0% (25/25)",
+    "end_to_end_completion": "96.2% (25/26) (S12 is a deliberate corrupt file)",
+    "processing_ms_median_all": "32 ms (n=25)",
+    "processing_ms_p95_all": "1066 ms (n=25)",
+    "processing_ms_median_text_pdfs": "32 ms (n=23)",
+    "processing_ms_median_scanned_pdfs": "1183 ms (n=2)"
+  },
+  "per_field": {
+    "invoice_number": [
+      24,
+      24
+    ],
+    "invoice_date": [
+      24,
+      24
+    ],
+    "due_date": [
+      24,
+      24
+    ],
+    "po_number": [
+      24,
+      24
+    ],
+    "currency": [
+      24,
+      24
+    ],
+    "subtotal": [
+      24,
+      24
+    ],
+    "tax_total": [
+      24,
+      24
+    ],
+    "grand_total": [
+      24,
+      24
+    ],
+    "vendor_tax_id": [
+      24,
+      24
+    ]
+  },
+  "rows": [
+    {
+      "id": "H01",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY"
+      },
+      "labelled": {
+        "invoice_number": "KIG/26-27/1043",
+        "invoice_date": "2026-10-12",
+        "due_date": null,
+        "po_number": "PO-450115",
+        "currency": "INR",
+        "subtotal": "86800.00",
+        "tax_total": "10416.00",
+        "grand_total": "97216.00",
+        "vendor_gstin": "29AABCK8890F1Z3",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Industrial oxygen cylinder 7 cu.m, refill",
+            "quantity": "120",
+            "unit_price": "340.00",
+            "line_subtotal": "40800.00"
+          },
+          {
+            "description": "Argon cylinder 7 cu.m, refill",
+            "quantity": "40",
+            "unit_price": "1150.00",
+            "line_subtotal": "46000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1010",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1010",
+      "po": "PO-450115",
+      "fields": {
+        "invoice_number": "KIG/26-27/1043",
+        "invoice_date": "2026-10-12",
+        "due_date": null,
+        "po_number": "PO-450115",
+        "currency": "INR",
+        "subtotal": "86800.00",
+        "tax_total": "10416.00",
+        "grand_total": "97216.00",
+        "vendor_tax_id": "29AABCK8890F1Z3"
+      },
+      "lines": [
+        {
+          "quantity": "120.000",
+          "unit_price": "340.00",
+          "line_subtotal": "40800.00"
+        },
+        {
+          "quantity": "40.000",
+          "unit_price": "1150.00",
+          "line_subtotal": "46000.00"
+        }
+      ],
+      "duration_ms": 85,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H02",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY"
+      },
+      "labelled": {
+        "invoice_number": "SH/2026/0612",
+        "invoice_date": "2026-10-07",
+        "due_date": "2026-11-21",
+        "po_number": "PO-450116",
+        "currency": "INR",
+        "subtotal": "89360.00",
+        "tax_total": "16084.80",
+        "grand_total": "105444.80",
+        "vendor_gstin": "33AAICS3378N1ZT",
+        "line_count": 3,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Hydraulic cylinder 63 bore x 300 stroke",
+            "quantity": "2",
+            "unit_price": "18600.00",
+            "line_subtotal": "37200.00"
+          },
+          {
+            "description": "Hydraulic hose assembly 1/2 in x 1 m",
+            "quantity": "24",
+            "unit_price": "1240.00",
+            "line_subtotal": "29760.00"
+          },
+          {
+            "description": "Gear pump 16 cc",
+            "quantity": "1",
+            "unit_price": "22400.00",
+            "line_subtotal": "22400.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1015",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1015",
+      "po": "PO-450116",
+      "fields": {
+        "invoice_number": "SH/2026/0612",
+        "invoice_date": "2026-10-07",
+        "due_date": "2026-11-21",
+        "po_number": "PO-450116",
+        "currency": "INR",
+        "subtotal": "89360.00",
+        "tax_total": "16084.80",
+        "grand_total": "105444.80",
+        "vendor_tax_id": "33AAICS3378N1ZT"
+      },
+      "lines": [
+        {
+          "quantity": "2.000",
+          "unit_price": "18600.00",
+          "line_subtotal": "37200.00"
+        },
+        {
+          "quantity": "24.000",
+          "unit_price": "1240.00",
+          "line_subtotal": "29760.00"
+        },
+        {
+          "quantity": "1.000",
+          "unit_price": "22400.00",
+          "line_subtotal": "22400.00"
+        }
+      ],
+      "duration_ms": 35,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H03",
+      "group": "history",
+      "expect": {
+        "status": "ON_HOLD",
+        "codes": [
+          "GRN_PENDING"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "SH/2026/0688",
+        "invoice_date": "2026-10-30",
+        "due_date": "2026-12-14",
+        "po_number": "PO-450117",
+        "currency": "INR",
+        "subtotal": "67200.00",
+        "tax_total": "12096.00",
+        "grand_total": "79296.00",
+        "vendor_gstin": "33AAICS3378N1ZT",
+        "line_count": 1,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Gear pump 16 cc",
+            "quantity": "3",
+            "unit_price": "22400.00",
+            "line_subtotal": "67200.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1015",
+      "duplicate_file": false,
+      "status": "ON_HOLD",
+      "codes": [
+        "GRN_PENDING"
+      ],
+      "match_mode": "TWO_WAY",
+      "vendor": "V-1015",
+      "po": "PO-450117",
+      "fields": {
+        "invoice_number": "SH/2026/0688",
+        "invoice_date": "2026-10-30",
+        "due_date": "2026-12-14",
+        "po_number": "PO-450117",
+        "currency": "INR",
+        "subtotal": "67200.00",
+        "tax_total": "12096.00",
+        "grand_total": "79296.00",
+        "vendor_tax_id": "33AAICS3378N1ZT"
+      },
+      "lines": [
+        {
+          "quantity": "3.000",
+          "unit_price": "22400.00",
+          "line_subtotal": "67200.00"
+        }
+      ],
+      "duration_ms": 26,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H04",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "TWO_WAY"
+      },
+      "labelled": {
+        "invoice_number": "LCS-1026",
+        "invoice_date": "2026-11-02",
+        "due_date": null,
+        "po_number": "PO-450119",
+        "currency": "INR",
+        "subtotal": "589000.00",
+        "tax_total": "29450.00",
+        "grand_total": "618450.00",
+        "vendor_gstin": "27AJXPL5521H1ZS",
+        "line_count": 1,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Employee meals (per plate)",
+            "quantity": "6200",
+            "unit_price": "95.00",
+            "line_subtotal": "589000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1014",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "TWO_WAY",
+      "vendor": "V-1014",
+      "po": "PO-450119",
+      "fields": {
+        "invoice_number": "LCS-1026",
+        "invoice_date": "2026-11-02",
+        "due_date": null,
+        "po_number": "PO-450119",
+        "currency": "INR",
+        "subtotal": "589000.00",
+        "tax_total": "29450.00",
+        "grand_total": "618450.00",
+        "vendor_tax_id": "27AJXPL5521H1ZS"
+      },
+      "lines": [
+        {
+          "quantity": "6200.000",
+          "unit_price": "95.00",
+          "line_subtotal": "589000.00"
+        }
+      ],
+      "duration_ms": 30,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H05",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "TWO_WAY"
+      },
+      "labelled": {
+        "invoice_number": "TNC/INV/2026/118",
+        "invoice_date": "2026-10-20",
+        "due_date": "2026-11-19",
+        "po_number": "PO-450121",
+        "currency": "INR",
+        "subtotal": "180000.00",
+        "tax_total": "32400.00",
+        "grand_total": "212400.00",
+        "vendor_gstin": "06AAKFT2290C1ZB",
+        "line_count": 1,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Process improvement advisory (person-day)",
+            "quantity": "4",
+            "unit_price": "45000.00",
+            "line_subtotal": "180000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1011",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "TWO_WAY",
+      "vendor": "V-1011",
+      "po": "PO-450121",
+      "fields": {
+        "invoice_number": "TNC/INV/2026/118",
+        "invoice_date": "2026-10-20",
+        "due_date": "2026-11-19",
+        "po_number": "PO-450121",
+        "currency": "INR",
+        "subtotal": "180000.00",
+        "tax_total": "32400.00",
+        "grand_total": "212400.00",
+        "vendor_tax_id": "06AAKFT2290C1ZB"
+      },
+      "lines": [
+        {
+          "quantity": "4.000",
+          "unit_price": "45000.00",
+          "line_subtotal": "180000.00"
+        }
+      ],
+      "duration_ms": 51,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H06",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY"
+      },
+      "labelled": {
+        "invoice_number": "MOS/2026/0457",
+        "invoice_date": "2026-10-02",
+        "due_date": "2026-11-01",
+        "po_number": "PO-450103",
+        "currency": "INR",
+        "subtotal": "88500.00",
+        "tax_total": "12510.00",
+        "grand_total": "101010.00",
+        "vendor_gstin": "27AAWFM4417P1ZE",
+        "line_count": 3,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "A4 copier paper 75 GSM (ream)",
+            "quantity": "200",
+            "unit_price": "285.00",
+            "line_subtotal": "57000.00"
+          },
+          {
+            "description": "Whiteboard marker, assorted (box of 10)",
+            "quantity": "30",
+            "unit_price": "450.00",
+            "line_subtotal": "13500.00"
+          },
+          {
+            "description": "Lever arch file, A4",
+            "quantity": "150",
+            "unit_price": "120.00",
+            "line_subtotal": "18000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1003",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1003",
+      "po": "PO-450103",
+      "fields": {
+        "invoice_number": "MOS/2026/0457",
+        "invoice_date": "2026-10-02",
+        "due_date": "2026-11-01",
+        "po_number": "PO-450103",
+        "currency": "INR",
+        "subtotal": "88500.00",
+        "tax_total": "12510.00",
+        "grand_total": "101010.00",
+        "vendor_tax_id": "27AAWFM4417P1ZE"
+      },
+      "lines": [
+        {
+          "quantity": "200.000",
+          "unit_price": "285.00",
+          "line_subtotal": "57000.00"
+        },
+        {
+          "quantity": "30.000",
+          "unit_price": "450.00",
+          "line_subtotal": "13500.00"
+        },
+        {
+          "quantity": "150.000",
+          "unit_price": "120.00",
+          "line_subtotal": "18000.00"
+        }
+      ],
+      "duration_ms": 33,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H07",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY"
+      },
+      "labelled": {
+        "invoice_number": "SGS/26-27/1187",
+        "invoice_date": "2026-10-03",
+        "due_date": "2026-11-17",
+        "po_number": "PO-450110",
+        "currency": "INR",
+        "subtotal": "1721500.00",
+        "tax_total": "309870.00",
+        "grand_total": "2031370.00",
+        "vendor_gstin": "27ABQFS6610D1Z2",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "MS Angle 50x50x6 mm, 6 m length",
+            "quantity": "250",
+            "unit_price": "2150.00",
+            "line_subtotal": "537500.00"
+          },
+          {
+            "description": "MS Plate 10 mm, 1250x2500 mm",
+            "quantity": "80",
+            "unit_price": "14800.00",
+            "line_subtotal": "1184000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1002",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1002",
+      "po": "PO-450110",
+      "fields": {
+        "invoice_number": "SGS/26-27/1187",
+        "invoice_date": "2026-10-03",
+        "due_date": "2026-11-17",
+        "po_number": "PO-450110",
+        "currency": "INR",
+        "subtotal": "1721500.00",
+        "tax_total": "309870.00",
+        "grand_total": "2031370.00",
+        "vendor_tax_id": "27ABQFS6610D1Z2"
+      },
+      "lines": [
+        {
+          "quantity": "250.000",
+          "unit_price": "2150.00",
+          "line_subtotal": "537500.00"
+        },
+        {
+          "quantity": "80.000",
+          "unit_price": "14800.00",
+          "line_subtotal": "1184000.00"
+        }
+      ],
+      "duration_ms": 27,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H08",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY"
+      },
+      "labelled": {
+        "invoice_number": "IF/26/3301",
+        "invoice_date": "2026-09-24",
+        "due_date": null,
+        "po_number": "PO-450120",
+        "currency": "INR",
+        "subtotal": "56100.00",
+        "tax_total": "10098.00",
+        "grand_total": "66198.00",
+        "vendor_gstin": "03AADCI6619J1ZL",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Hex bolt M12 x 60 HT 8.8, zinc plated",
+            "quantity": "3000",
+            "unit_price": "14.50",
+            "line_subtotal": "43500.00"
+          },
+          {
+            "description": "Hex nut M12 HT, zinc plated",
+            "quantity": "3000",
+            "unit_price": "4.20",
+            "line_subtotal": "12600.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1016",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1016",
+      "po": "PO-450120",
+      "fields": {
+        "invoice_number": "IF/26/3301",
+        "invoice_date": "2026-09-24",
+        "due_date": null,
+        "po_number": "PO-450120",
+        "currency": "INR",
+        "subtotal": "56100.00",
+        "tax_total": "10098.00",
+        "grand_total": "66198.00",
+        "vendor_tax_id": "03AADCI6619J1ZL"
+      },
+      "lines": [
+        {
+          "quantity": "3000.000",
+          "unit_price": "14.50",
+          "line_subtotal": "43500.00"
+        },
+        {
+          "quantity": "3000.000",
+          "unit_price": "4.20",
+          "line_subtotal": "12600.00"
+        }
+      ],
+      "duration_ms": 23,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H09",
+      "group": "history",
+      "expect": {
+        "status": "ON_HOLD",
+        "codes": [
+          "VENDOR_NOT_APPROVED"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "ASE/2026/077",
+        "invoice_date": "2026-10-29",
+        "due_date": "2026-11-28",
+        "po_number": "PO-450114",
+        "currency": "INR",
+        "subtotal": "274500.00",
+        "tax_total": "49410.00",
+        "grand_total": "323910.00",
+        "vendor_gstin": "24AAOFA7712G1ZJ",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Safety helmet with chin strap",
+            "quantity": "150",
+            "unit_price": "380.00",
+            "line_subtotal": "57000.00"
+          },
+          {
+            "description": "Safety shoes, steel toe",
+            "quantity": "150",
+            "unit_price": "1450.00",
+            "line_subtotal": "217500.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1012",
+      "duplicate_file": false,
+      "status": "ON_HOLD",
+      "codes": [
+        "VENDOR_NOT_APPROVED"
+      ],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1012",
+      "po": "PO-450114",
+      "fields": {
+        "invoice_number": "ASE/2026/077",
+        "invoice_date": "2026-10-29",
+        "due_date": "2026-11-28",
+        "po_number": "PO-450114",
+        "currency": "INR",
+        "subtotal": "274500.00",
+        "tax_total": "49410.00",
+        "grand_total": "323910.00",
+        "vendor_tax_id": "24AAOFA7712G1ZJ"
+      },
+      "lines": [
+        {
+          "quantity": "150.000",
+          "unit_price": "380.00",
+          "line_subtotal": "57000.00"
+        },
+        {
+          "quantity": "150.000",
+          "unit_price": "1450.00",
+          "line_subtotal": "217500.00"
+        }
+      ],
+      "duration_ms": 44,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H10",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "TWO_WAY"
+      },
+      "labelled": {
+        "invoice_number": "OFM/2026/10/221",
+        "invoice_date": "2026-10-31",
+        "due_date": "2026-11-30",
+        "po_number": "PO-450107",
+        "currency": "INR",
+        "subtotal": "384000.00",
+        "tax_total": "69120.00",
+        "grand_total": "453120.00",
+        "vendor_gstin": "27AABCO3349E1ZL",
+        "line_count": 1,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Housekeeping services, monthly (24 staff)",
+            "quantity": "1",
+            "unit_price": "384000.00",
+            "line_subtotal": "384000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1007",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "TWO_WAY",
+      "vendor": "V-1007",
+      "po": "PO-450107",
+      "fields": {
+        "invoice_number": "OFM/2026/10/221",
+        "invoice_date": "2026-10-31",
+        "due_date": "2026-11-30",
+        "po_number": "PO-450107",
+        "currency": "INR",
+        "subtotal": "384000.00",
+        "tax_total": "69120.00",
+        "grand_total": "453120.00",
+        "vendor_tax_id": "27AABCO3349E1ZL"
+      },
+      "lines": [
+        {
+          "quantity": "1.000",
+          "unit_price": "384000.00",
+          "line_subtotal": "384000.00"
+        }
+      ],
+      "duration_ms": 85,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H11",
+      "group": "history",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY"
+      },
+      "labelled": {
+        "invoice_number": "IFS-2026-0419",
+        "invoice_date": "2026-10-22",
+        "due_date": null,
+        "po_number": "PO-450122",
+        "currency": "INR",
+        "subtotal": "39160.00",
+        "tax_total": "7048.80",
+        "grand_total": "46208.80",
+        "vendor_gstin": "03AADCI7720K1ZN",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Anchor bolt M16 x 150",
+            "quantity": "600",
+            "unit_price": "42.60",
+            "line_subtotal": "25560.00"
+          },
+          {
+            "description": "Threaded rod M10 x 1 m",
+            "quantity": "200",
+            "unit_price": "68.00",
+            "line_subtotal": "13600.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1017",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1017",
+      "po": "PO-450122",
+      "fields": {
+        "invoice_number": "IFS-2026-0419",
+        "invoice_date": "2026-10-22",
+        "due_date": null,
+        "po_number": "PO-450122",
+        "currency": "INR",
+        "subtotal": "39160.00",
+        "tax_total": "7048.80",
+        "grand_total": "46208.80",
+        "vendor_tax_id": "03AADCI7720K1ZN"
+      },
+      "lines": [
+        {
+          "quantity": "600.000",
+          "unit_price": "42.60",
+          "line_subtotal": "25560.00"
+        },
+        {
+          "quantity": "200.000",
+          "unit_price": "68.00",
+          "line_subtotal": "13600.00"
+        }
+      ],
+      "duration_ms": 23,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "H12",
+      "group": "history",
+      "expect": {
+        "status": "NEEDS_REVIEW",
+        "codes": [
+          "PO_CLOSED"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "BEPL/26-27/0371",
+        "invoice_date": "2026-10-09",
+        "due_date": "2026-11-08",
+        "po_number": "PO-450124",
+        "currency": "INR",
+        "subtotal": "13600.00",
+        "tax_total": "2448.00",
+        "grand_total": "16048.00",
+        "vendor_gstin": "07AAECB6674M1Z6",
+        "line_count": 1,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "MCB distribution board 12-way",
+            "quantity": "2",
+            "unit_price": "6800.00",
+            "line_subtotal": "13600.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1009",
+      "duplicate_file": false,
+      "status": "NEEDS_REVIEW",
+      "codes": [
+        "PO_CLOSED"
+      ],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1009",
+      "po": "PO-450124",
+      "fields": {
+        "invoice_number": "BEPL/26-27/0371",
+        "invoice_date": "2026-10-09",
+        "due_date": "2026-11-08",
+        "po_number": "PO-450124",
+        "currency": "INR",
+        "subtotal": "13600.00",
+        "tax_total": "2448.00",
+        "grand_total": "16048.00",
+        "vendor_tax_id": "07AAECB6674M1Z6"
+      },
+      "lines": [
+        {
+          "quantity": "2.000",
+          "unit_price": "6800.00",
+          "line_subtotal": "13600.00"
+        }
+      ],
+      "duration_ms": 38,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S01",
+      "group": "demo",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY",
+        "vendor": "V-1005",
+        "po": "PO-450101",
+        "invoice_number": "PBI/2026/0981",
+        "grand_total": "330872.00",
+        "codes_absent": [
+          "PRICE_VARIANCE_EXCEEDED",
+          "QUANTITY_EXCEEDED"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "PBI/2026/0981",
+        "invoice_date": "2026-11-05",
+        "due_date": "2026-12-20",
+        "po_number": "PO-450101",
+        "currency": "INR",
+        "subtotal": "280400.00",
+        "tax_total": "50472.00",
+        "grand_total": "330872.00",
+        "vendor_gstin": "24AADCP9032H1ZI",
+        "line_count": 3,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Deep groove ball bearing 6205-2RS",
+            "quantity": "400",
+            "unit_price": "185.00",
+            "line_subtotal": "74000.00"
+          },
+          {
+            "description": "Tapered roller bearing 32210",
+            "quantity": "120",
+            "unit_price": "1240.00",
+            "line_subtotal": "148800.00"
+          },
+          {
+            "description": "Pillow block bearing UCP 208",
+            "quantity": "60",
+            "unit_price": "960.00",
+            "line_subtotal": "57600.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1005",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1005",
+      "po": "PO-450101",
+      "fields": {
+        "invoice_number": "PBI/2026/0981",
+        "invoice_date": "2026-11-05",
+        "due_date": "2026-12-20",
+        "po_number": "PO-450101",
+        "currency": "INR",
+        "subtotal": "280400.00",
+        "tax_total": "50472.00",
+        "grand_total": "330872.00",
+        "vendor_tax_id": "24AADCP9032H1ZI"
+      },
+      "lines": [
+        {
+          "quantity": "400.000",
+          "unit_price": "185.00",
+          "line_subtotal": "74000.00"
+        },
+        {
+          "quantity": "120.000",
+          "unit_price": "1240.00",
+          "line_subtotal": "148800.00"
+        },
+        {
+          "quantity": "60.000",
+          "unit_price": "960.00",
+          "line_subtotal": "57600.00"
+        }
+      ],
+      "duration_ms": 29,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S03",
+      "group": "demo",
+      "expect": {
+        "status": "ON_HOLD",
+        "codes": [
+          "INVOICE_DUPLICATE_SUSPECTED"
+        ],
+        "vendor": "V-1003"
+      },
+      "labelled": {
+        "invoice_number": "MOS-2026-0457",
+        "invoice_date": "2026-10-02",
+        "due_date": null,
+        "po_number": "PO-450103",
+        "currency": "INR",
+        "subtotal": "88500.00",
+        "tax_total": "12510.00",
+        "grand_total": "101010.00",
+        "vendor_gstin": "27AAWFM4417P1ZE",
+        "line_count": 3,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "A4 copier paper 75 GSM (ream)",
+            "quantity": "200",
+            "unit_price": "285.00",
+            "line_subtotal": "57000.00"
+          },
+          {
+            "description": "Whiteboard marker, assorted (box of 10)",
+            "quantity": "30",
+            "unit_price": "450.00",
+            "line_subtotal": "13500.00"
+          },
+          {
+            "description": "Lever arch file, A4",
+            "quantity": "150",
+            "unit_price": "120.00",
+            "line_subtotal": "18000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1003",
+      "duplicate_file": false,
+      "status": "ON_HOLD",
+      "codes": [
+        "INVOICE_DUPLICATE_SUSPECTED",
+        "QUANTITY_EXCEEDED",
+        "GRN_QUANTITY_MISMATCH",
+        "PO_BALANCE_EXCEEDED"
+      ],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1003",
+      "po": "PO-450103",
+      "fields": {
+        "invoice_number": "MOS-2026-0457",
+        "invoice_date": "2026-10-02",
+        "due_date": null,
+        "po_number": "PO-450103",
+        "currency": "INR",
+        "subtotal": "88500.00",
+        "tax_total": "12510.00",
+        "grand_total": "101010.00",
+        "vendor_tax_id": "27AAWFM4417P1ZE"
+      },
+      "lines": [
+        {
+          "quantity": "200.000",
+          "unit_price": "285.00",
+          "line_subtotal": "57000.00"
+        },
+        {
+          "quantity": "30.000",
+          "unit_price": "450.00",
+          "line_subtotal": "13500.00"
+        },
+        {
+          "quantity": "150.000",
+          "unit_price": "120.00",
+          "line_subtotal": "18000.00"
+        }
+      ],
+      "duration_ms": 24,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S04",
+      "group": "demo",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY",
+        "po": "PO-450110"
+      },
+      "labelled": {
+        "invoice_number": "SGS/26-27/1214",
+        "invoice_date": "2026-10-23",
+        "due_date": "2026-12-07",
+        "po_number": "PO-450110",
+        "currency": "INR",
+        "subtotal": "914500.00",
+        "tax_total": "164610.00",
+        "grand_total": "1079110.00",
+        "vendor_gstin": "27ABQFS6610D1Z2",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "MS Angle 50x50x6 mm, 6 m length",
+            "quantity": "150",
+            "unit_price": "2150.00",
+            "line_subtotal": "322500.00"
+          },
+          {
+            "description": "MS Plate 10 mm, 1250x2500 mm",
+            "quantity": "40",
+            "unit_price": "14800.00",
+            "line_subtotal": "592000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1002",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1002",
+      "po": "PO-450110",
+      "fields": {
+        "invoice_number": "SGS/26-27/1214",
+        "invoice_date": "2026-10-23",
+        "due_date": "2026-12-07",
+        "po_number": "PO-450110",
+        "currency": "INR",
+        "subtotal": "914500.00",
+        "tax_total": "164610.00",
+        "grand_total": "1079110.00",
+        "vendor_tax_id": "27ABQFS6610D1Z2"
+      },
+      "lines": [
+        {
+          "quantity": "150.000",
+          "unit_price": "2150.00",
+          "line_subtotal": "322500.00"
+        },
+        {
+          "quantity": "40.000",
+          "unit_price": "14800.00",
+          "line_subtotal": "592000.00"
+        }
+      ],
+      "duration_ms": 29,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S05",
+      "group": "demo",
+      "expect": {
+        "status": "NEEDS_REVIEW",
+        "codes": [
+          "QUANTITY_EXCEEDED",
+          "GRN_QUANTITY_MISMATCH"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "IF/26/3388",
+        "invoice_date": "2026-10-30",
+        "due_date": null,
+        "po_number": "PO-450120",
+        "currency": "INR",
+        "subtotal": "46750.00",
+        "tax_total": "8415.00",
+        "grand_total": "55165.00",
+        "vendor_gstin": "03AADCI6619J1ZL",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Hex bolt M12 x 60 HT 8.8, zinc plated",
+            "quantity": "2500",
+            "unit_price": "14.50",
+            "line_subtotal": "36250.00"
+          },
+          {
+            "description": "Hex nut M12 HT, zinc plated",
+            "quantity": "2500",
+            "unit_price": "4.20",
+            "line_subtotal": "10500.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1016",
+      "duplicate_file": false,
+      "status": "NEEDS_REVIEW",
+      "codes": [
+        "QUANTITY_EXCEEDED",
+        "GRN_QUANTITY_MISMATCH",
+        "PO_BALANCE_EXCEEDED"
+      ],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1016",
+      "po": "PO-450120",
+      "fields": {
+        "invoice_number": "IF/26/3388",
+        "invoice_date": "2026-10-30",
+        "due_date": null,
+        "po_number": "PO-450120",
+        "currency": "INR",
+        "subtotal": "46750.00",
+        "tax_total": "8415.00",
+        "grand_total": "55165.00",
+        "vendor_tax_id": "03AADCI6619J1ZL"
+      },
+      "lines": [
+        {
+          "quantity": "2500.000",
+          "unit_price": "14.50",
+          "line_subtotal": "36250.00"
+        },
+        {
+          "quantity": "2500.000",
+          "unit_price": "4.20",
+          "line_subtotal": "10500.00"
+        }
+      ],
+      "duration_ms": 32,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S06",
+      "group": "demo",
+      "expect": {
+        "status": "NEEDS_REVIEW",
+        "codes": [
+          "PO_AMBIGUOUS"
+        ],
+        "vendor": "V-1004"
+      },
+      "labelled": {
+        "invoice_number": "CL/2026/7781",
+        "invoice_date": "2026-11-04",
+        "due_date": "2026-11-19",
+        "po_number": null,
+        "currency": "INR",
+        "subtotal": "145000.00",
+        "tax_total": "17940.00",
+        "grand_total": "162940.00",
+        "vendor_gstin": "33AACCC7781Q1Z2",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "FTL freight Chennai to Pune, 32 ft container",
+            "quantity": "2",
+            "unit_price": "68000.00",
+            "line_subtotal": "136000.00"
+          },
+          {
+            "description": "Loading and unloading charges",
+            "quantity": "2",
+            "unit_price": "4500.00",
+            "line_subtotal": "9000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1004",
+      "duplicate_file": false,
+      "status": "NEEDS_REVIEW",
+      "codes": [
+        "PO_AMBIGUOUS"
+      ],
+      "match_mode": null,
+      "vendor": "V-1004",
+      "po": null,
+      "fields": {
+        "invoice_number": "CL/2026/7781",
+        "invoice_date": "2026-11-04",
+        "due_date": "2026-11-19",
+        "po_number": null,
+        "currency": "INR",
+        "subtotal": "145000.00",
+        "tax_total": "17940.00",
+        "grand_total": "162940.00",
+        "vendor_tax_id": "33AACCC7781Q1Z2"
+      },
+      "lines": [
+        {
+          "quantity": "2.000",
+          "unit_price": "68000.00",
+          "line_subtotal": "136000.00"
+        },
+        {
+          "quantity": "2.000",
+          "unit_price": "4500.00",
+          "line_subtotal": "9000.00"
+        }
+      ],
+      "duration_ms": 23,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S07",
+      "group": "demo",
+      "expect": {
+        "status": "NEEDS_REVIEW",
+        "codes_any": [
+          "LOW_EXTRACTION_CONFIDENCE",
+          "CRITICAL_FIELD_MISSING"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "SPI/1311/26",
+        "invoice_date": "2026-11-06",
+        "due_date": "2026-12-06",
+        "po_number": "PO-450108",
+        "currency": "INR",
+        "subtotal": "306000.00",
+        "tax_total": "55080.00",
+        "grand_total": "361080.00",
+        "vendor_gstin": "27ACMFS1187B1Z2",
+        "line_count": 2,
+        "scanned": true,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Corrugated box 5-ply 600x400x400 mm",
+            "quantity": "3000",
+            "unit_price": "78.00",
+            "line_subtotal": "234000.00"
+          },
+          {
+            "description": "Edge protector 50 mm x 1 m",
+            "quantity": "6000",
+            "unit_price": "12.00",
+            "line_subtotal": "72000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1008",
+      "duplicate_file": false,
+      "status": "NEEDS_REVIEW",
+      "codes": [
+        "LOW_EXTRACTION_CONFIDENCE"
+      ],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1008",
+      "po": "PO-450108",
+      "fields": {
+        "invoice_number": "SPI/1311/26",
+        "invoice_date": "2026-11-06",
+        "due_date": "2026-12-06",
+        "po_number": "PO-450108",
+        "currency": "INR",
+        "subtotal": "306000.00",
+        "tax_total": "55080.00",
+        "grand_total": "361080.00",
+        "vendor_tax_id": "27ACMFS1187B1Z2"
+      },
+      "lines": [
+        {
+          "quantity": "3000.000",
+          "unit_price": "78.00",
+          "line_subtotal": "234000.00"
+        },
+        {
+          "quantity": "6000.000",
+          "unit_price": "12.00",
+          "line_subtotal": "72000.00"
+        }
+      ],
+      "duration_ms": 1066,
+      "run_status": "COMPLETED",
+      "ocr": true,
+      "extractor": "rules-v1 (tesseract OCR)"
+    },
+    {
+      "id": "S08",
+      "group": "demo",
+      "expect": {
+        "status": "NEEDS_REVIEW",
+        "codes": [
+          "VENDOR_BANK_DETAILS_CHANGED"
+        ],
+        "priority": "HIGH"
+      },
+      "labelled": {
+        "invoice_number": "NCS/INV/26/1104",
+        "invoice_date": "2026-11-03",
+        "due_date": "2026-12-03",
+        "po_number": "PO-450106",
+        "currency": "INR",
+        "subtotal": "163000.00",
+        "tax_total": "29340.00",
+        "grand_total": "192340.00",
+        "vendor_gstin": "36AAGCN5520R1ZY",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Managed Kubernetes cluster, monthly",
+            "quantity": "1",
+            "unit_price": "125000.00",
+            "line_subtotal": "125000.00"
+          },
+          {
+            "description": "Object storage 50 TB, monthly",
+            "quantity": "1",
+            "unit_price": "38000.00",
+            "line_subtotal": "38000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1006",
+      "duplicate_file": false,
+      "status": "NEEDS_REVIEW",
+      "codes": [
+        "VENDOR_BANK_DETAILS_CHANGED"
+      ],
+      "match_mode": "TWO_WAY",
+      "vendor": "V-1006",
+      "po": "PO-450106",
+      "fields": {
+        "invoice_number": "NCS/INV/26/1104",
+        "invoice_date": "2026-11-03",
+        "due_date": "2026-12-03",
+        "po_number": "PO-450106",
+        "currency": "INR",
+        "subtotal": "163000.00",
+        "tax_total": "29340.00",
+        "grand_total": "192340.00",
+        "vendor_tax_id": "36AAGCN5520R1ZY"
+      },
+      "lines": [
+        {
+          "quantity": "1.000",
+          "unit_price": "125000.00",
+          "line_subtotal": "125000.00"
+        },
+        {
+          "quantity": "1.000",
+          "unit_price": "38000.00",
+          "line_subtotal": "38000.00"
+        }
+      ],
+      "duration_ms": 34,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S09",
+      "group": "demo",
+      "expect": {
+        "status": "NEEDS_REVIEW",
+        "codes": [
+          "PRICE_VARIANCE_EXCEEDED"
+        ],
+        "po": "PO-450109"
+      },
+      "labelled": {
+        "invoice_number": "VSS/26-27/0412",
+        "invoice_date": "2026-11-07",
+        "due_date": "2026-12-07",
+        "po_number": "PO-450109",
+        "currency": "INR",
+        "subtotal": "495000.00",
+        "tax_total": "89100.00",
+        "grand_total": "584100.00",
+        "vendor_gstin": "29AAFCV2231K1Z6",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Vertex PLM Enterprise licence (annual)",
+            "quantity": "10",
+            "unit_price": "43500.00",
+            "line_subtotal": "435000.00"
+          },
+          {
+            "description": "Implementation support (person-day)",
+            "quantity": "5",
+            "unit_price": "12000.00",
+            "line_subtotal": "60000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1001",
+      "duplicate_file": false,
+      "status": "NEEDS_REVIEW",
+      "codes": [
+        "PRICE_VARIANCE_EXCEEDED",
+        "AMOUNT_VARIANCE_EXCEEDED",
+        "PO_BALANCE_EXCEEDED"
+      ],
+      "match_mode": "TWO_WAY",
+      "vendor": "V-1001",
+      "po": "PO-450109",
+      "fields": {
+        "invoice_number": "VSS/26-27/0412",
+        "invoice_date": "2026-11-07",
+        "due_date": "2026-12-07",
+        "po_number": "PO-450109",
+        "currency": "INR",
+        "subtotal": "495000.00",
+        "tax_total": "89100.00",
+        "grand_total": "584100.00",
+        "vendor_tax_id": "29AAFCV2231K1Z6"
+      },
+      "lines": [
+        {
+          "quantity": "10.000",
+          "unit_price": "43500.00",
+          "line_subtotal": "435000.00"
+        },
+        {
+          "quantity": "5.000",
+          "unit_price": "12000.00",
+          "line_subtotal": "60000.00"
+        }
+      ],
+      "duration_ms": 32,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S10",
+      "group": "demo",
+      "expect": {
+        "status": "NEEDS_REVIEW",
+        "codes": [
+          "TOTAL_ARITHMETIC_MISMATCH"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "BEPL/26-27/0402",
+        "invoice_date": "2026-11-02",
+        "due_date": "2026-12-02",
+        "po_number": "PO-450112",
+        "currency": "INR",
+        "subtotal": "457200.00",
+        "tax_total": "82296.00",
+        "grand_total": "549496.00",
+        "vendor_gstin": "07AAECB6674M1Z6",
+        "line_count": 3,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "LED high-bay light 150W",
+            "quantity": "40",
+            "unit_price": "4250.00",
+            "line_subtotal": "170000.00"
+          },
+          {
+            "description": "Armoured cable 4C x 16 sq mm",
+            "quantity": "500",
+            "unit_price": "520.00",
+            "line_subtotal": "260000.00"
+          },
+          {
+            "description": "MCB distribution board 12-way",
+            "quantity": "4",
+            "unit_price": "6800.00",
+            "line_subtotal": "27200.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1009",
+      "duplicate_file": false,
+      "status": "NEEDS_REVIEW",
+      "codes": [
+        "TOTAL_ARITHMETIC_MISMATCH"
+      ],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1009",
+      "po": "PO-450112",
+      "fields": {
+        "invoice_number": "BEPL/26-27/0402",
+        "invoice_date": "2026-11-02",
+        "due_date": "2026-12-02",
+        "po_number": "PO-450112",
+        "currency": "INR",
+        "subtotal": "457200.00",
+        "tax_total": "82296.00",
+        "grand_total": "549496.00",
+        "vendor_tax_id": "07AAECB6674M1Z6"
+      },
+      "lines": [
+        {
+          "quantity": "40.000",
+          "unit_price": "4250.00",
+          "line_subtotal": "170000.00"
+        },
+        {
+          "quantity": "500.000",
+          "unit_price": "520.00",
+          "line_subtotal": "260000.00"
+        },
+        {
+          "quantity": "4.000",
+          "unit_price": "6800.00",
+          "line_subtotal": "27200.00"
+        }
+      ],
+      "duration_ms": 30,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S11",
+      "group": "demo",
+      "expect": {
+        "status": "REJECTED",
+        "codes": [
+          "VENDOR_NOT_APPROVED"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "RPM/2026/0559",
+        "invoice_date": "2026-11-01",
+        "due_date": "2026-12-01",
+        "po_number": "PO-450113",
+        "currency": "INR",
+        "subtotal": "279000.00",
+        "tax_total": "50220.00",
+        "grand_total": "329220.00",
+        "vendor_gstin": "27AACCR4456L1Z0",
+        "line_count": 2,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Product catalogue print run, 5000 copies",
+            "quantity": "1",
+            "unit_price": "240000.00",
+            "line_subtotal": "240000.00"
+          },
+          {
+            "description": "Trade-show banner 3 x 2 m",
+            "quantity": "6",
+            "unit_price": "6500.00",
+            "line_subtotal": "39000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1013",
+      "duplicate_file": false,
+      "status": "REJECTED",
+      "codes": [
+        "VENDOR_NOT_APPROVED"
+      ],
+      "match_mode": "TWO_WAY",
+      "vendor": "V-1013",
+      "po": "PO-450113",
+      "fields": {
+        "invoice_number": "RPM/2026/0559",
+        "invoice_date": "2026-11-01",
+        "due_date": "2026-12-01",
+        "po_number": "PO-450113",
+        "currency": "INR",
+        "subtotal": "279000.00",
+        "tax_total": "50220.00",
+        "grand_total": "329220.00",
+        "vendor_tax_id": "27AACCR4456L1Z0"
+      },
+      "lines": [
+        {
+          "quantity": "1.000",
+          "unit_price": "240000.00",
+          "line_subtotal": "240000.00"
+        },
+        {
+          "quantity": "6.000",
+          "unit_price": "6500.00",
+          "line_subtotal": "39000.00"
+        }
+      ],
+      "duration_ms": 45,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S12",
+      "group": "demo",
+      "expect": {
+        "status": "FAILED",
+        "retryable": false
+      },
+      "labelled": null,
+      "vendor_code": "V-1009",
+      "duplicate_file": false,
+      "status": "FAILED",
+      "codes": [
+        "FILE_INVALID"
+      ],
+      "match_mode": null,
+      "vendor": null,
+      "po": null,
+      "fields": {
+        "invoice_number": null,
+        "invoice_date": null,
+        "due_date": null,
+        "po_number": null,
+        "currency": null,
+        "subtotal": null,
+        "tax_total": null,
+        "grand_total": null,
+        "vendor_tax_id": null
+      },
+      "lines": [],
+      "duration_ms": null,
+      "run_status": "FAILED",
+      "ocr": false,
+      "extractor": null
+    },
+    {
+      "id": "S13",
+      "group": "demo",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY",
+        "line_count": 26
+      },
+      "labelled": {
+        "invoice_number": "GLH/2026/11/0093",
+        "invoice_date": "2026-11-04",
+        "due_date": "2026-12-04",
+        "po_number": "PO-450118",
+        "currency": "INR",
+        "subtotal": "3181350.00",
+        "tax_total": "572643.00",
+        "grand_total": "3753993.00",
+        "vendor_gstin": "29AAHCG9981D1Z3",
+        "line_count": 26,
+        "scanned": false,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Laptop 14 in, Core i7, 16 GB, 512 GB SSD",
+            "quantity": "12",
+            "unit_price": "78500.00",
+            "line_subtotal": "942000.00"
+          },
+          {
+            "description": "Laptop 15 in, Core i5, 16 GB, 512 GB SSD",
+            "quantity": "8",
+            "unit_price": "64200.00",
+            "line_subtotal": "513600.00"
+          },
+          {
+            "description": "Docking station USB-C, dual display",
+            "quantity": "20",
+            "unit_price": "9800.00",
+            "line_subtotal": "196000.00"
+          },
+          {
+            "description": "Monitor 24 in IPS, FHD",
+            "quantity": "20",
+            "unit_price": "11200.00",
+            "line_subtotal": "224000.00"
+          },
+          {
+            "description": "Monitor 27 in IPS, QHD",
+            "quantity": "6",
+            "unit_price": "21400.00",
+            "line_subtotal": "128400.00"
+          },
+          {
+            "description": "Wireless keyboard and mouse combo",
+            "quantity": "25",
+            "unit_price": "2350.00",
+            "line_subtotal": "58750.00"
+          },
+          {
+            "description": "USB-C to HDMI adapter",
+            "quantity": "20",
+            "unit_price": "1150.00",
+            "line_subtotal": "23000.00"
+          },
+          {
+            "description": "Laptop backpack, 15.6 in",
+            "quantity": "20",
+            "unit_price": "1890.00",
+            "line_subtotal": "37800.00"
+          },
+          {
+            "description": "Noise-cancelling USB headset",
+            "quantity": "15",
+            "unit_price": "4600.00",
+            "line_subtotal": "69000.00"
+          },
+          {
+            "description": "Webcam 1080p with privacy shutter",
+            "quantity": "10",
+            "unit_price": "3250.00",
+            "line_subtotal": "32500.00"
+          },
+          {
+            "description": "Network switch 24-port gigabit, managed",
+            "quantity": "2",
+            "unit_price": "28900.00",
+            "line_subtotal": "57800.00"
+          },
+          {
+            "description": "Wi-Fi 6 access point, ceiling mount",
+            "quantity": "6",
+            "unit_price": "15600.00",
+            "line_subtotal": "93600.00"
+          },
+          {
+            "description": "Cat6 patch cord 2 m",
+            "quantity": "80",
+            "unit_price": "180.00",
+            "line_subtotal": "14400.00"
+          },
+          {
+            "description": "Cat6 patch cord 5 m",
+            "quantity": "40",
+            "unit_price": "290.00",
+            "line_subtotal": "11600.00"
+          },
+          {
+            "description": "UPS 1 kVA line interactive",
+            "quantity": "4",
+            "unit_price": "8700.00",
+            "line_subtotal": "34800.00"
+          },
+          {
+            "description": "External SSD 1 TB, USB 3.2",
+            "quantity": "6",
+            "unit_price": "7400.00",
+            "line_subtotal": "44400.00"
+          },
+          {
+            "description": "Laser printer A4 mono, duplex",
+            "quantity": "2",
+            "unit_price": "16800.00",
+            "line_subtotal": "33600.00"
+          },
+          {
+            "description": "Toner cartridge for A4 mono printer",
+            "quantity": "8",
+            "unit_price": "4200.00",
+            "line_subtotal": "33600.00"
+          },
+          {
+            "description": "Rack server 1U, 2x Xeon, 64 GB",
+            "quantity": "1",
+            "unit_price": "385000.00",
+            "line_subtotal": "385000.00"
+          },
+          {
+            "description": "Server rail kit 1U",
+            "quantity": "1",
+            "unit_price": "6400.00",
+            "line_subtotal": "6400.00"
+          },
+          {
+            "description": "NAS 4-bay with 4x 8 TB drives",
+            "quantity": "1",
+            "unit_price": "142000.00",
+            "line_subtotal": "142000.00"
+          },
+          {
+            "description": "KVM switch 8-port",
+            "quantity": "1",
+            "unit_price": "12600.00",
+            "line_subtotal": "12600.00"
+          },
+          {
+            "description": "Surge protector 6-socket",
+            "quantity": "10",
+            "unit_price": "1450.00",
+            "line_subtotal": "14500.00"
+          },
+          {
+            "description": "Cable management tray",
+            "quantity": "6",
+            "unit_price": "2100.00",
+            "line_subtotal": "12600.00"
+          },
+          {
+            "description": "Laptop privacy screen 14 in",
+            "quantity": "12",
+            "unit_price": "2650.00",
+            "line_subtotal": "31800.00"
+          },
+          {
+            "description": "Barcode scanner, handheld 2D",
+            "quantity": "4",
+            "unit_price": "6900.00",
+            "line_subtotal": "27600.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1018",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1018",
+      "po": "PO-450118",
+      "fields": {
+        "invoice_number": "GLH/2026/11/0093",
+        "invoice_date": "2026-11-04",
+        "due_date": "2026-12-04",
+        "po_number": "PO-450118",
+        "currency": "INR",
+        "subtotal": "3181350.00",
+        "tax_total": "572643.00",
+        "grand_total": "3753993.00",
+        "vendor_tax_id": "29AAHCG9981D1Z3"
+      },
+      "lines": [
+        {
+          "quantity": "12.000",
+          "unit_price": "78500.00",
+          "line_subtotal": "942000.00"
+        },
+        {
+          "quantity": "8.000",
+          "unit_price": "64200.00",
+          "line_subtotal": "513600.00"
+        },
+        {
+          "quantity": "20.000",
+          "unit_price": "9800.00",
+          "line_subtotal": "196000.00"
+        },
+        {
+          "quantity": "20.000",
+          "unit_price": "11200.00",
+          "line_subtotal": "224000.00"
+        },
+        {
+          "quantity": "6.000",
+          "unit_price": "21400.00",
+          "line_subtotal": "128400.00"
+        },
+        {
+          "quantity": "25.000",
+          "unit_price": "2350.00",
+          "line_subtotal": "58750.00"
+        },
+        {
+          "quantity": "20.000",
+          "unit_price": "1150.00",
+          "line_subtotal": "23000.00"
+        },
+        {
+          "quantity": "20.000",
+          "unit_price": "1890.00",
+          "line_subtotal": "37800.00"
+        },
+        {
+          "quantity": "15.000",
+          "unit_price": "4600.00",
+          "line_subtotal": "69000.00"
+        },
+        {
+          "quantity": "10.000",
+          "unit_price": "3250.00",
+          "line_subtotal": "32500.00"
+        },
+        {
+          "quantity": "2.000",
+          "unit_price": "28900.00",
+          "line_subtotal": "57800.00"
+        },
+        {
+          "quantity": "6.000",
+          "unit_price": "15600.00",
+          "line_subtotal": "93600.00"
+        },
+        {
+          "quantity": "80.000",
+          "unit_price": "180.00",
+          "line_subtotal": "14400.00"
+        },
+        {
+          "quantity": "40.000",
+          "unit_price": "290.00",
+          "line_subtotal": "11600.00"
+        },
+        {
+          "quantity": "4.000",
+          "unit_price": "8700.00",
+          "line_subtotal": "34800.00"
+        },
+        {
+          "quantity": "6.000",
+          "unit_price": "7400.00",
+          "line_subtotal": "44400.00"
+        },
+        {
+          "quantity": "2.000",
+          "unit_price": "16800.00",
+          "line_subtotal": "33600.00"
+        },
+        {
+          "quantity": "8.000",
+          "unit_price": "4200.00",
+          "line_subtotal": "33600.00"
+        },
+        {
+          "quantity": "1.000",
+          "unit_price": "385000.00",
+          "line_subtotal": "385000.00"
+        },
+        {
+          "quantity": "1.000",
+          "unit_price": "6400.00",
+          "line_subtotal": "6400.00"
+        },
+        {
+          "quantity": "1.000",
+          "unit_price": "142000.00",
+          "line_subtotal": "142000.00"
+        },
+        {
+          "quantity": "1.000",
+          "unit_price": "12600.00",
+          "line_subtotal": "12600.00"
+        },
+        {
+          "quantity": "10.000",
+          "unit_price": "1450.00",
+          "line_subtotal": "14500.00"
+        },
+        {
+          "quantity": "6.000",
+          "unit_price": "2100.00",
+          "line_subtotal": "12600.00"
+        },
+        {
+          "quantity": "12.000",
+          "unit_price": "2650.00",
+          "line_subtotal": "31800.00"
+        },
+        {
+          "quantity": "4.000",
+          "unit_price": "6900.00",
+          "line_subtotal": "27600.00"
+        }
+      ],
+      "duration_ms": 57,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S14",
+      "group": "demo",
+      "expect": {
+        "status": "READY_FOR_APPROVAL",
+        "match_mode": "THREE_WAY"
+      },
+      "labelled": {
+        "invoice_number": "KIG/26-27/1268",
+        "invoice_date": "2026-11-09",
+        "due_date": "2026-12-09",
+        "po_number": "PO-450128",
+        "currency": "INR",
+        "subtotal": "86800.00",
+        "tax_total": "10416.00",
+        "grand_total": "97216.00",
+        "vendor_gstin": "29AABCK8890F1Z3",
+        "line_count": 2,
+        "scanned": true,
+        "rules_parseable": true,
+        "lines": [
+          {
+            "description": "Industrial oxygen cylinder 7 cu.m, refill",
+            "quantity": "120",
+            "unit_price": "340.00",
+            "line_subtotal": "40800.00"
+          },
+          {
+            "description": "Argon cylinder 7 cu.m, refill",
+            "quantity": "40",
+            "unit_price": "1150.00",
+            "line_subtotal": "46000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1010",
+      "duplicate_file": false,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1010",
+      "po": "PO-450128",
+      "fields": {
+        "invoice_number": "KIG/26-27/1268",
+        "invoice_date": "2026-11-09",
+        "due_date": "2026-12-09",
+        "po_number": "PO-450128",
+        "currency": "INR",
+        "subtotal": "86800.00",
+        "tax_total": "10416.00",
+        "grand_total": "97216.00",
+        "vendor_tax_id": "29AABCK8890F1Z3"
+      },
+      "lines": [
+        {
+          "quantity": "120.000",
+          "unit_price": "340.00",
+          "line_subtotal": "40800.00"
+        },
+        {
+          "quantity": "40.000",
+          "unit_price": "1150.00",
+          "line_subtotal": "46000.00"
+        }
+      ],
+      "duration_ms": 1300,
+      "run_status": "COMPLETED",
+      "ocr": true,
+      "extractor": "rules-v1 (tesseract OCR)"
+    },
+    {
+      "id": "S15",
+      "group": "demo",
+      "expect": {
+        "status": "NEEDS_REVIEW",
+        "codes_any": [
+          "CRITICAL_FIELD_MISSING",
+          "LINE_ITEM_UNMATCHED"
+        ]
+      },
+      "labelled": {
+        "invoice_number": "LCS-1131",
+        "invoice_date": "2026-11-10",
+        "due_date": "2026-11-25",
+        "po_number": "PO-450133",
+        "currency": "INR",
+        "subtotal": "608000.00",
+        "tax_total": "30400.00",
+        "grand_total": "638400.00",
+        "vendor_gstin": "27AJXPL5521H1ZS",
+        "line_count": 1,
+        "scanned": false,
+        "rules_parseable": false,
+        "lines": [
+          {
+            "description": "Employee meals (per plate)",
+            "quantity": "6400",
+            "unit_price": "95.00",
+            "line_subtotal": "608000.00"
+          }
+        ]
+      },
+      "vendor_code": "V-1014",
+      "duplicate_file": false,
+      "status": "NEEDS_REVIEW",
+      "codes": [
+        "CRITICAL_FIELD_MISSING",
+        "CURRENCY_MISMATCH",
+        "LINE_ITEM_UNMATCHED"
+      ],
+      "match_mode": "TWO_WAY",
+      "vendor": "V-1014",
+      "po": "PO-450133",
+      "fields": {
+        "invoice_number": null,
+        "invoice_date": null,
+        "due_date": null,
+        "po_number": "PO-450133",
+        "currency": null,
+        "subtotal": null,
+        "tax_total": null,
+        "grand_total": null,
+        "vendor_tax_id": "27AJXPL5521H1ZS"
+      },
+      "lines": [],
+      "duration_ms": 19,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    },
+    {
+      "id": "S02",
+      "group": "demo",
+      "expect": {
+        "duplicate_file": true,
+        "new_invoice_created": false
+      },
+      "labelled": null,
+      "vendor_code": null,
+      "duplicate_file": true,
+      "status": "READY_FOR_APPROVAL",
+      "codes": [],
+      "match_mode": "THREE_WAY",
+      "vendor": "V-1005",
+      "po": "PO-450101",
+      "fields": {
+        "invoice_number": "PBI/2026/0981",
+        "invoice_date": "2026-11-05",
+        "due_date": "2026-12-20",
+        "po_number": "PO-450101",
+        "currency": "INR",
+        "subtotal": "280400.00",
+        "tax_total": "50472.00",
+        "grand_total": "330872.00",
+        "vendor_tax_id": "24AADCP9032H1ZI"
+      },
+      "lines": [
+        {
+          "quantity": "400.000",
+          "unit_price": "185.00",
+          "line_subtotal": "74000.00"
+        },
+        {
+          "quantity": "120.000",
+          "unit_price": "1240.00",
+          "line_subtotal": "148800.00"
+        },
+        {
+          "quantity": "60.000",
+          "unit_price": "960.00",
+          "line_subtotal": "57600.00"
+        }
+      ],
+      "duration_ms": null,
+      "run_status": "COMPLETED",
+      "ocr": false,
+      "extractor": "rules-v1 (embedded text)"
+    }
+  ]
+}

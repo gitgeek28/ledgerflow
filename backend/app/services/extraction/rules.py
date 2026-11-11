@@ -20,6 +20,7 @@ from app.core.config import get_settings
 from app.services.extraction.document import DocumentText, Line, Segment
 from app.services.extraction.schema import (
     CRITICAL_FIELDS,
+    HEADER_FIELDS,
     Evidence,
     ExtractedField,
     ExtractedLine,
@@ -213,7 +214,7 @@ class RuleBasedExtractor:
 
     def extract(self, doc: DocumentText) -> ExtractionResult:
         ctx = _Ctx(doc, doc.all_lines())
-        fields: dict[str, ExtractedField] = {}
+        fields: dict[str, ExtractedField] = {name: ExtractedField() for name in HEADER_FIELDS}
         issues: list[ExtractionIssue] = []
 
         fields["invoice_number"] = self._labelled(ctx, "invoice_number", parse_invoice_number)

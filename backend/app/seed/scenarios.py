@@ -158,6 +158,13 @@ DEMO: list[InvoiceSpec] = [
                 "PO-450128", [L(0, "120"), L(1, "40")], layout="A", scanned=True,
                 description="Image-only PDF (no text layer) read by OCR; good scan quality, goods received.",
                 expect={"status": "READY_FOR_APPROVAL", "match_mode": "THREE_WAY"}),
+    InvoiceSpec("S15", "Unfamiliar free-form layout", "demo", "V-1014", "LCS-1131", date(2026, 11, 10),
+                "PO-450133", [L(0, "6400")], layout="L",
+                description="A letter instead of an invoice template: no labels, no table. Rules recover only the "
+                            "PO; with Ollama running, the local model proposes header values that are kept only if "
+                            "found verbatim in the text. Line items still cannot be reconciled, so it goes to review.",
+                expect={"status": "NEEDS_REVIEW",
+                        "codes_any": ["CRITICAL_FIELD_MISSING", "LINE_ITEM_UNMATCHED"]}),
 ]
 
 ALL_SPECS = HISTORY + DEMO

@@ -13,7 +13,8 @@ from app.services.policy import PolicySettings
 from app.services.vendor_resolution import resolve_vendor
 
 CATALOGUE = {c["id"]: c for c in yaml.safe_load((REPO_DIR / "data/fixtures/scenarios.yaml").read_text())}
-TEXT_LAYER = [k for k, c in CATALOGUE.items() if "labelled" in c and not c["labelled"]["scanned"]]
+TEXT_LAYER = [k for k, c in CATALOGUE.items() if "labelled" in c and not c["labelled"]["scanned"]
+              and c["labelled"].get("rules_parseable", True)]
 
 
 @pytest.mark.parametrize("sid", TEXT_LAYER)

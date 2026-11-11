@@ -23,6 +23,7 @@
     vendor_gstin: 29AABCK8890F1Z3
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: Industrial oxygen cylinder 7 cu.m, refill
       quantity: '120'
@@ -54,6 +55,7 @@
     vendor_gstin: 33AAICS3378N1ZT
     line_count: 3
     scanned: false
+    rules_parseable: true
     lines:
     - description: Hydraulic cylinder 63 bore x 300 stroke
       quantity: '2'
@@ -90,6 +92,7 @@
     vendor_gstin: 33AAICS3378N1ZT
     line_count: 1
     scanned: false
+    rules_parseable: true
     lines:
     - description: Gear pump 16 cc
       quantity: '3'
@@ -117,6 +120,7 @@
     vendor_gstin: 27AJXPL5521H1ZS
     line_count: 1
     scanned: false
+    rules_parseable: true
     lines:
     - description: Employee meals (per plate)
       quantity: '6200'
@@ -144,6 +148,7 @@
     vendor_gstin: 06AAKFT2290C1ZB
     line_count: 1
     scanned: false
+    rules_parseable: true
     lines:
     - description: Process improvement advisory (person-day)
       quantity: '4'
@@ -171,6 +176,7 @@
     vendor_gstin: 27AAWFM4417P1ZE
     line_count: 3
     scanned: false
+    rules_parseable: true
     lines:
     - description: A4 copier paper 75 GSM (ream)
       quantity: '200'
@@ -206,6 +212,7 @@
     vendor_gstin: 27ABQFS6610D1Z2
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: MS Angle 50x50x6 mm, 6 m length
       quantity: '250'
@@ -237,6 +244,7 @@
     vendor_gstin: 03AADCI6619J1ZL
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: Hex bolt M12 x 60 HT 8.8, zinc plated
       quantity: '3000'
@@ -269,6 +277,7 @@
     vendor_gstin: 24AAOFA7712G1ZJ
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: Safety helmet with chin strap
       quantity: '150'
@@ -300,6 +309,7 @@
     vendor_gstin: 27AABCO3349E1ZL
     line_count: 1
     scanned: false
+    rules_parseable: true
     lines:
     - description: Housekeeping services, monthly (24 staff)
       quantity: '1'
@@ -327,6 +337,7 @@
     vendor_gstin: 03AADCI7720K1ZN
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: Anchor bolt M16 x 150
       quantity: '600'
@@ -359,6 +370,7 @@
     vendor_gstin: 07AAECB6674M1Z6
     line_count: 1
     scanned: false
+    rules_parseable: true
     lines:
     - description: MCB distribution board 12-way
       quantity: '2'
@@ -394,6 +406,7 @@
     vendor_gstin: 24AADCP9032H1ZI
     line_count: 3
     scanned: false
+    rules_parseable: true
     lines:
     - description: Deep groove ball bearing 6205-2RS
       quantity: '400'
@@ -433,6 +446,7 @@
     vendor_gstin: 27AAWFM4417P1ZE
     line_count: 3
     scanned: false
+    rules_parseable: true
     lines:
     - description: A4 copier paper 75 GSM (ream)
       quantity: '200'
@@ -471,6 +485,7 @@
     vendor_gstin: 27ABQFS6610D1Z2
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: MS Angle 50x50x6 mm, 6 m length
       quantity: '150'
@@ -506,6 +521,7 @@
     vendor_gstin: 03AADCI6619J1ZL
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: Hex bolt M12 x 60 HT 8.8, zinc plated
       quantity: '2500'
@@ -540,6 +556,7 @@
     vendor_gstin: 33AACCC7781Q1Z2
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: FTL freight Chennai to Pune, 32 ft container
       quantity: '2'
@@ -574,6 +591,7 @@
     vendor_gstin: 27ACMFS1187B1Z2
     line_count: 2
     scanned: true
+    rules_parseable: true
     lines:
     - description: Corrugated box 5-ply 600x400x400 mm
       quantity: '3000'
@@ -608,6 +626,7 @@
     vendor_gstin: 36AAGCN5520R1ZY
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: Managed Kubernetes cluster, monthly
       quantity: '1'
@@ -641,6 +660,7 @@
     vendor_gstin: 29AAFCV2231K1Z6
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: Vertex PLM Enterprise licence (annual)
       quantity: '10'
@@ -673,6 +693,7 @@
     vendor_gstin: 07AAECB6674M1Z6
     line_count: 3
     scanned: false
+    rules_parseable: true
     lines:
     - description: LED high-bay light 150W
       quantity: '40'
@@ -709,6 +730,7 @@
     vendor_gstin: 27AACCR4456L1Z0
     line_count: 2
     scanned: false
+    rules_parseable: true
     lines:
     - description: Product catalogue print run, 5000 copies
       quantity: '1'
@@ -751,6 +773,7 @@
     vendor_gstin: 29AAHCG9981D1Z3
     line_count: 26
     scanned: false
+    rules_parseable: true
     lines:
     - description: Laptop 14 in, Core i7, 16 GB, 512 GB SSD
       quantity: '12'
@@ -878,6 +901,7 @@
     vendor_gstin: 29AABCK8890F1Z3
     line_count: 2
     scanned: true
+    rules_parseable: true
     lines:
     - description: Industrial oxygen cylinder 7 cu.m, refill
       quantity: '120'
@@ -887,6 +911,38 @@
       quantity: '40'
       unit_price: '1150.00'
       line_subtotal: '46000.00'
+- id: S15
+  title: Unfamiliar free-form layout
+  group: demo
+  file: pdfs/S15_LCS-1131.pdf
+  description: 'A letter instead of an invoice template: no labels, no table. Rules recover only the PO; with Ollama
+    running, the local model proposes header values that are kept only if found verbatim in the text. Line items
+    still cannot be reconciled, so it goes to review.'
+  vendor_code: V-1014
+  prerequisites: []
+  expect:
+    status: NEEDS_REVIEW
+    codes_any:
+    - CRITICAL_FIELD_MISSING
+    - LINE_ITEM_UNMATCHED
+  labelled:
+    invoice_number: LCS-1131
+    invoice_date: '2026-11-10'
+    due_date: '2026-11-25'
+    po_number: PO-450133
+    currency: INR
+    subtotal: '608000.00'
+    tax_total: '30400.00'
+    grand_total: '638400.00'
+    vendor_gstin: 27AJXPL5521H1ZS
+    line_count: 1
+    scanned: false
+    rules_parseable: false
+    lines:
+    - description: Employee meals (per plate)
+      quantity: '6400'
+      unit_price: '95.00'
+      line_subtotal: '608000.00'
 - id: S02
   title: Exact duplicate file
   group: demo
