@@ -1,26 +1,149 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------- design tokens
+   Light is the default. Warm neutral canvas, white surfaces, navy ink, one indigo accent.
+   Semantic colours: green = passed/ready, amber = review/hold, red = blocker/rejected, grey = info. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #faf9f6;
+  --surface-3: #f1efea;
+  --line: #e6e3dc;
+  --line-strong: #d6d2c8;
+  --ink: #161d2b;
+  --ink-2: #445066;
+  --ink-3: #727a8a;
+  --accent: #3243b8;
+  --accent-hover: #283799;
+  --accent-soft: #eceefa;
+  --accent-ink: #ffffff;
+  --success: #16794a;
+  --success-soft: #e6f4ec;
+  --warning: #9a5a06;
+  --warning-soft: #fcf1de;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --neutral: #5b6475;
+  --neutral-soft: #eff0f2;
+  --focus: #3243b8;
+  --shadow: 0 1px 2px rgba(22, 29, 43, 0.05), 0 1px 1px rgba(22, 29, 43, 0.03);
+  --highlight: rgba(50, 67, 184, 0.16);
+  /* chart series (validated: lightness band, CVD separation, contrast) */
+  --chart-ok: #16794a;
+  --chart-exception: #c98a1f;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0e1117;
+  --surface: #151922;
+  --surface-2: #191e28;
+  --surface-3: #1f2531;
+  --line: #262c38;
+  --line-strong: #333b49;
+  --ink: #e8eaef;
+  --ink-2: #b0b7c4;
+  --ink-3: #808999;
+  --accent: #8e9bf6;
+  --accent-hover: #a7b1f8;
+  --accent-soft: #1d2340;
+  --accent-ink: #0e1117;
+  --success: #4fc48b;
+  --success-soft: #11281d;
+  --warning: #e6a74e;
+  --warning-soft: #2c2213;
+  --danger: #f2756b;
+  --danger-soft: #331a1b;
+  --neutral: #9aa3b2;
+  --neutral-soft: #20262f;
+  --focus: #8e9bf6;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --highlight: rgba(142, 155, 246, 0.22);
+  --chart-ok: #33a06c;
+  --chart-exception: #c27b22;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-neutral: var(--neutral);
+  --color-neutral-soft: var(--neutral-soft);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --shadow-card: var(--shadow);
+  --radius-card: 10px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
 }
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--highlight);
+}
+
+/* thin, quiet scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+@keyframes lf-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.lf-pulse { animation: lf-pulse 1.4s ease-in-out infinite; }
+
+@keyframes lf-enter {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+.lf-enter { animation: lf-enter 220ms ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lf-pulse, .lf-enter { animation: none; }
+}
+
+/* react-pdf canvas */
+.react-pdf__Page__canvas { display: block; }

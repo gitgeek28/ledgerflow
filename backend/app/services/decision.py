@@ -10,6 +10,12 @@ from app.services.policy import CATALOGUE
 
 ORDER = {"REJECT": 3, "HOLD": 2, "REVIEW": 1, "NONE": 0}
 STATUS = {"REJECT": "REJECTED", "HOLD": "ON_HOLD", "REVIEW": "NEEDS_REVIEW", "NONE": "READY_FOR_APPROVAL"}
+# Within the same outcome, explain root causes before their consequences (e.g. unit price before total value).
+CAUSE_ORDER = ["VENDOR_BANK_DETAILS_CHANGED", "INVOICE_DUPLICATE_SUSPECTED", "VENDOR_NOT_APPROVED", "GRN_PENDING",
+               "CRITICAL_FIELD_MISSING", "LOW_EXTRACTION_CONFIDENCE", "VENDOR_NOT_FOUND", "VENDOR_AMBIGUOUS",
+               "PO_NOT_FOUND", "PO_AMBIGUOUS", "PO_VENDOR_MISMATCH", "PO_CLOSED", "CURRENCY_MISMATCH",
+               "TOTAL_ARITHMETIC_MISMATCH", "PRICE_VARIANCE_EXCEEDED", "QUANTITY_EXCEEDED", "GRN_QUANTITY_MISMATCH",
+               "TAX_MISMATCH", "LINE_ITEM_UNMATCHED", "AMOUNT_VARIANCE_EXCEEDED", "PO_BALANCE_EXCEEDED"]
 HIGH_PRIORITY = {"VENDOR_BANK_DETAILS_CHANGED", "INVOICE_DUPLICATE_SUSPECTED"}
 
 NEXT_ACTION = {
@@ -55,7 +61,8 @@ def decide(checks: list[CheckResult], *, match_mode: str | None, po_number: str 
     failing = [c for c in checks if c.failing]
     worst = max((c.outcome for c in failing), key=lambda o: ORDER[o], default="NONE")
     status = STATUS[worst]
-    ordered = sorted(failing, key=lambda c: (-ORDER[c.outcome], c.code))
+    rank = {code: i for i, code in enumerate(CAUSE_ORDER)}
+    ordered = sorted(failing, key=lambda c: (-ORDER[c.outcome], rank.get(c.code, 99), c.subject or ""))
     codes = list(dict.fromkeys(c.code for c in ordered))
     priority = "HIGH" if (security or HIGH_PRIORITY & set(codes)) else ("NORMAL" if failing else "LOW")
     mode = {"THREE_WAY": "three-way match (invoice / PO / goods receipt)", "TWO_WAY": "two-way match (invoice / PO)"}
@@ -69,11 +76,20 @@ def decide(checks: list[CheckResult], *, match_mode: str | None, po_number: str 
         next_action = "AP manager approval" if requires_manager else "Approve for payment run"
     else:
         lead = {"REJECTED": "Rejected", "ON_HOLD": "On hold", "NEEDS_REVIEW": "Needs review"}[status]
-        reasons = [f"{CATALOGUE[c.code].title if c.code in CATALOGUE else c.code} ({c.message.rstrip('.')})"
-                   for c in ordered[:3]]
+        reasons = []
+        for c in ordered:
+            if any(r.startswith(CATALOGUE[c.code].title) for r in reasons if c.code in CATALOGUE):
+                continue  # one fragment per code; the full list is in the checks
+            title = CATALOGUE[c.code].title if c.code in CATALOGUE else c.code
+            detail = (f"{c.subject + ': ' if c.subject else ''}{c.actual} vs {c.expected}" if c.actual and c.expected
+                      else c.message.split(". ")[0].rstrip("."))
+            reasons.append(f"{title} ({detail})")
+            if len(reasons) == 3:
+                break
         summary = f"{lead}: " + "; ".join(reasons) + "."
-        if len(ordered) > 3:
-            summary += f" Plus {len(ordered) - 3} more exception(s)."
+        extra = len(set(c.code for c in ordered)) - len(reasons)
+        if extra > 0:
+            summary += f" Plus {extra} more exception type(s)."
         summary += " Not payable until resolved." if status != "REJECTED" else " No payment will be made."
         next_action = NEXT_ACTION.get(ordered[0].code, "Review the exceptions")
     return Decision(status, codes, priority, summary, next_action)

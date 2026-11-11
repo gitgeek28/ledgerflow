@@ -6,7 +6,7 @@ import structlog
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import audit, auth, dashboard, health, invoices, policies, queue, reference, runs
+from app.api.routes import audit, auth, dashboard, health, invoices, policies, queue, reference, runs, samples
 from app.core.config import get_settings
 from app.core.errors import install_error_handlers
 from app.core.logging import configure_logging, get_logger
@@ -52,5 +52,5 @@ async def request_context(request: Request, call_next):
 
 
 for r in (health.router, auth.router, invoices.router, runs.router, reference.router, queue.router, audit.router,
-          policies.router, dashboard.router):
+          policies.router, dashboard.router, samples.router):
     app.include_router(r, prefix="/api")

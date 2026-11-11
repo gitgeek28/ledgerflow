@@ -82,8 +82,14 @@ def summary(days: int = Query(30, ge=0, le=3650), db: Session = Depends(get_db),
                func.sum(case((Invoice.status.in_(["READY_FOR_APPROVAL", "APPROVED"]), 1), else_=0)),
                func.sum(case((Invoice.status.in_(["NEEDS_REVIEW", "ON_HOLD", "REJECTED"]), 1), else_=0)))
         .where(in_period).group_by(day).order_by(day)).all()
-    series = [{"date": d.date().isoformat(), "received": c, "value": str(v), "ready_or_approved": int(r or 0),
-               "exceptions": int(x or 0)} for d, c, v, r, x in series_rows]
+    by_day = {d.date(): (c, v, r, x) for d, c, v, r, x in series_rows}
+    first = (now - timedelta(days=min(days, 90) - 1)).date() if days else (min(by_day) if by_day else now.date())
+    series, cur = [], first
+    while cur <= now.date():  # zero-filled so quiet days are visible, not skipped
+        c, v, r, x = by_day.get(cur, (0, 0, 0, 0))
+        series.append({"date": cur.isoformat(), "received": c, "value": str(v), "ready_or_approved": int(r or 0),
+                       "exceptions": int(x or 0)})
+        cur += timedelta(days=1)
 
     recent = db.scalars(select(ProcessingRun).order_by(desc(ProcessingRun.created_at)).limit(8)).all()
     prio = case((Invoice.priority == "HIGH", 0), else_=1)
