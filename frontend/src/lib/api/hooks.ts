@@ -37,7 +37,7 @@ export const useInvoice = (id: string) => useQuery({
 export const useInvoiceAudit = (id: string) => useQuery({
   queryKey: ["invoice-audit", id], queryFn: () => api.get<AuditEvent[]>(`/invoices/${id}/audit`) });
 
-export const useRuns = (p: { status?: string; page?: number }) => useQuery({
+export const useRuns = (p: { status?: string; page?: number; sort?: string; order?: string }) => useQuery({
   queryKey: ["runs", p], queryFn: () => api.get<Page<Run>>("/runs", { ...p, page_size: 25 }),
   placeholderData: keepPreviousData, refetchInterval: 5_000 });
 export const useRun = (id: string) => useQuery({
@@ -51,18 +51,18 @@ export const useReviewQueue = (view: string) => useQuery({
   refetchInterval: 10_000 });
 
 export const useVendors = (p: { q?: string; status?: string; page?: number }) => useQuery({
-  queryKey: ["vendors", p], queryFn: () => api.get<Page<Vendor>>("/vendors", { ...p, page_size: 50 }),
+  queryKey: ["vendors", p], queryFn: () => api.get<Page<Vendor>>("/vendors", { ...p, page_size: 200 }),
   placeholderData: keepPreviousData });
 export const useVendor = (id: string) => useQuery({
   queryKey: ["vendor", id], queryFn: () => api.get<{ vendor: Vendor; purchase_orders: PurchaseOrder[];
     invoices: InvoiceListItem[]; bank_change_alerts: number }>(`/vendors/${id}`) });
 export const usePOs = (p: { q?: string; status?: string; vendor_id?: string; page?: number }) => useQuery({
-  queryKey: ["pos", p], queryFn: () => api.get<Page<PurchaseOrder>>("/purchase-orders", { ...p, page_size: 50 }),
+  queryKey: ["pos", p], queryFn: () => api.get<Page<PurchaseOrder>>("/purchase-orders", { ...p, page_size: 200 }),
   placeholderData: keepPreviousData });
 export const usePO = (id: string) => useQuery({ queryKey: ["po", id],
   queryFn: () => api.get<PODetail>(`/purchase-orders/${id}`) });
 
-export const useAudit = (p: { q?: string; actor_type?: string; action?: string; page?: number }) => useQuery({
+export const useAudit = (p: { q?: string; actor_type?: string; action?: string; page?: number; sort?: string; order?: string }) => useQuery({
   queryKey: ["audit", p], queryFn: () => api.get<Page<AuditEvent>>("/audit", { ...p, page_size: 50 }),
   placeholderData: keepPreviousData, refetchInterval: 15_000 });
 export const useAuditActions = () => useQuery({ queryKey: ["audit-actions"],

@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { PageHeader } from "@/components/layout/shell";
-import { Segmented, Tip } from "@/components/ui/overlays";
-import { Card, EmptyState, ErrorState, Input, Mono } from "@/components/ui/primitives";
-import { Pagination, SkeletonRows, Table, Td, Th, THead, Tr } from "@/components/ui/table";
+import { Segmented } from "@/components/ui/overlays";
+import { Avatar, Card, EmptyState, ErrorState, Input, Mono } from "@/components/ui/primitives";
+import { SkeletonRows, SortTh, Table, Td, THead, Tr, useClientSort } from "@/components/ui/table";
 import { usePOs } from "@/lib/api/hooks";
 import type { PurchaseOrder } from "@/lib/api/types";
 import { date, humanize, money } from "@/lib/format";
@@ -22,10 +22,14 @@ export default function PurchaseOrdersPage() {
   const router = useRouter();
   const [search, setSearch] = React.useState("");
   const [status, setStatus] = React.useState("");
-  const [page, setPage] = React.useState(1);
   const q = useDebounced(search);
-  React.useEffect(() => setPage(1), [q, status]);
-  const { data, isLoading, isError, error, refetch } = usePOs({ q: q || undefined, status: status || undefined, page });
+  const { data, isLoading, isError, error, refetch } = usePOs({ q: q || undefined, status: status || undefined, page: 1 });
+  const t = useClientSort(data?.items, {
+    po: (p) => p.po_number, vendor: (p) => p.vendor.legal_name, description: (p) => p.description, type: (p) => p.po_type,
+    date: (p) => p.po_date, value: (p) => Number(p.subtotal), invoiced: (p) => Number(p.invoiced_value),
+    remaining: (p) => Number(p.remaining_value), grns: (p) => p.grn_count, status: (p) => p.status,
+  }, { sort: "date", order: "desc" });
+  const sp = { sort: t.sort, order: t.order, onSort: t.onSort };
 
   return (
     <div>
@@ -44,18 +48,22 @@ export default function PurchaseOrdersPage() {
           <Table>
             <THead>
               <tr>
-                <Th>PO number</Th><Th>Vendor</Th><Th>Description</Th><Th>Type</Th><Th>PO date</Th>
-                <Th align="right"><Tip content="PO subtotal before GST"><span>Value (pre-tax)</span></Tip></Th>
-                <Th align="right">Invoiced</Th><Th align="right">Remaining</Th><Th align="right">GRNs</Th><Th>Status</Th>
+                <SortTh label="PO number" field="po" {...sp} /><SortTh label="Vendor" field="vendor" {...sp} />
+                <SortTh label="Description" field="description" {...sp} /><SortTh label="Type" field="type" {...sp} />
+                <SortTh label="PO date" field="date" {...sp} /><SortTh label="Value (pre-tax)" field="value" align="right" {...sp} />
+                <SortTh label="Invoiced" field="invoiced" align="right" {...sp} />
+                <SortTh label="Remaining" field="remaining" align="right" {...sp} />
+                <SortTh label="GRNs" field="grns" align="right" {...sp} /><SortTh label="Status" field="status" {...sp} />
               </tr>
             </THead>
             <tbody>
-              {isLoading ? <SkeletonRows cols={10} /> : data?.items.map((po: PurchaseOrder) => (
+              {isLoading ? <SkeletonRows cols={10} /> : t.rows?.map((po: PurchaseOrder) => (
                 <Tr key={po.id} onClick={() => router.push(`/purchase-orders/${po.id}`)}>
                   <Td><Mono className="text-ink">{po.po_number}</Mono></Td>
                   <Td>
-                    <div className="max-w-[220px] truncate">{po.vendor.legal_name}</div>
-                    <div className="text-[12px] text-ink-3">{po.vendor.vendor_code}</div>
+                    <div className="flex items-center gap-2.5"><Avatar name={po.vendor.legal_name} /><div className="min-w-0">
+                    <div className="max-w-[200px] truncate font-medium">{po.vendor.legal_name}</div>
+                    <div className="text-[12px] text-ink-3">{po.vendor.vendor_code}</div></div></div>
                   </Td>
                   <Td className="max-w-[260px] truncate text-ink-2">{po.description}</Td>
                   <Td className="text-ink-2">{humanize(po.po_type)}</Td>
@@ -78,11 +86,7 @@ export default function PurchaseOrdersPage() {
             <EmptyState icon={<ClipboardList />} title="No purchase orders match"
               description={q || status ? "Try a different search or status filter." : "Run the seed command to load the demo PO register."} />
           )}
-          {data && data.total > 0 && (
-            <div className="border-t border-line">
-              <Pagination page={page} pageSize={data.page_size} total={data.total} onPage={setPage} />
-            </div>
-          )}
+          {data && data.total > 0 && <div className="px-4 py-3 text-[12px] text-ink-3">{data.total} purchase order{data.total === 1 ? "" : "s"} · values exclude GST</div>}
         </Card>
       )}
     </div>

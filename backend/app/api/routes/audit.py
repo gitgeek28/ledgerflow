@@ -3,9 +3,9 @@ import io
 import uuid
 from datetime import datetime
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import StreamingResponse
-from sqlalchemy import desc, func, or_, select
+from sqlalchemy import String, asc, cast, desc, func, or_, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import Paging
@@ -36,13 +36,21 @@ def _query(q, actor_type, action, invoice_id, since, until):
     return query
 
 
+AUDIT_SORTS = {"occurred_at": AuditEvent.occurred_at, "actor": AuditEvent.actor_name, "action": AuditEvent.action,
+               "entity": AuditEvent.entity_label, "reason": AuditEvent.reason_code, "actor_type": AuditEvent.actor_type,
+               "note": AuditEvent.note, "change": cast(AuditEvent.after, String)}
+
+
 @router.get("", response_model=api.Page[api.AuditOut])
 def list_audit(q: str | None = None, actor_type: str | None = None, action: str | None = None,
                invoice_id: uuid.UUID | None = None, since: datetime | None = None, until: datetime | None = None,
+               sort: str = "occurred_at", order: str = Query("desc", pattern="^(asc|desc)$"),
                paging: Paging = Depends(), db: Session = Depends(get_db), _: User = Depends(current_user)):
     query = _query(q, actor_type, action, invoice_id, since, until)
     total = db.scalar(select(func.count()).select_from(query.subquery()))
-    rows = db.scalars(query.order_by(desc(AuditEvent.id)).offset(paging.offset).limit(paging.page_size)).all()
+    col = AUDIT_SORTS.get(sort, AuditEvent.occurred_at)
+    query = query.order_by((asc if order == "asc" else desc)(col).nulls_last(), desc(AuditEvent.id))
+    rows = db.scalars(query.offset(paging.offset).limit(paging.page_size)).all()
     return api.Page(items=rows, total=total, page=paging.page, page_size=paging.page_size)
 
 

@@ -18,7 +18,7 @@ import { Card, ErrorState, Kv, Label, Skeleton, Textarea } from "@/components/ui
 import { api, ApiError } from "@/lib/api/client";
 import { useDemoUsers, useInvoice, usePolicies, useReviewAction } from "@/lib/api/hooks";
 import type { InvoiceDetail } from "@/lib/api/types";
-import { bytes, date, dateTime, humanize, money } from "@/lib/format";
+import { bytes, date, dateTime, humanize, money, STAGES } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 const PdfViewer = dynamic(() => import("@/components/pdf/pdf-viewer"), { ssr: false,
@@ -70,6 +70,47 @@ function DecisionBanner({ inv }: { inv: InvoiceDetail }) {
           Identical file re-submitted {inv.duplicate_submissions.length}× (latest: “{inv.duplicate_submissions[0].filename}” by {inv.duplicate_submissions[0].by}). No new invoice was created.
         </div>
       )}
+    </Card>
+  );
+}
+
+function Journey({ inv }: { inv: InvoiceDetail }) {
+  const run = inv.latest_run;
+  if (!run) return null;
+  const outputs = run.stage_outputs ?? {};
+  const startIdx = STAGES.findIndex((s) => s.key === run.start_stage);
+  return (
+    <Card className="mb-4 px-4 py-3">
+      <div className="mb-2 flex items-center justify-between gap-2 text-[12px] text-ink-3">
+        <span>Journey · run #{run.attempt} ({humanize(run.trigger)}) · policy v{run.policy_version ?? "—"}</span>
+        <Link href={`/runs/${run.id}`} className="font-medium text-accent hover:underline">Open run timeline →</Link>
+      </div>
+      <ol className="flex items-center gap-1 overflow-x-auto pb-1">
+        {STAGES.map((s, i) => {
+          const failing = inv.checks.filter((c) => c.stage === s.key && c.status !== "PASS" && c.outcome !== "NONE");
+          const ran = s.key === "RECEIVED" || s.key in outputs;
+          const reused = !ran && startIdx > 0 && i < startIdx;
+          const failedHere = run.status === "FAILED" && run.current_stage === s.key;
+          const state = failedHere ? "failed" : failing.length ? "warn" : ran ? "ok" : reused ? "reused" : "pending";
+          return (
+            <React.Fragment key={s.key}>
+              {i > 0 && <span className={cn("h-px min-w-3 flex-1", ran || reused ? "bg-line-strong" : "bg-line")} />}
+              <li>
+                <Link href={`/runs/${run.id}`} title={failing.length ? `${s.label}: ${failing.map((c) => c.code).join(", ")}` : s.description}
+                  className={cn("flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-1 text-[11.5px] transition-colors hover:border-line-strong",
+                    state === "ok" && "border-success/25 bg-success-soft text-success",
+                    state === "warn" && "border-warning/30 bg-warning-soft text-warning",
+                    state === "failed" && "border-danger/30 bg-danger-soft text-danger",
+                    (state === "reused" || state === "pending") && "border-line bg-surface-2 text-ink-3")}>
+                  {state === "ok" ? <CheckCircle2 className="size-3.5" /> : state === "warn" ? <AlertTriangle className="size-3.5" />
+                    : state === "failed" ? <Ban className="size-3.5" /> : <span className="size-1.5 rounded-full bg-current" />}
+                  {s.label}{failing.length > 0 && <span className="num font-semibold">{failing.length}</span>}
+                </Link>
+              </li>
+            </React.Fragment>
+          );
+        })}
+      </ol>
     </Card>
   );
 }
@@ -235,6 +276,7 @@ export default function InvoicePage() {
         </>}
       />
       <DecisionBanner inv={inv} />
+      <Journey inv={inv} />
 
       <div className="grid gap-4 xl:grid-cols-[minmax(420px,0.9fr)_minmax(0,1.1fr)]">
         <Card className="overflow-hidden xl:sticky xl:top-16 xl:h-[calc(100vh-84px)]">

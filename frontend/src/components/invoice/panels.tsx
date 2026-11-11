@@ -8,7 +8,7 @@ import type { Highlight } from "@/components/pdf/pdf-viewer";
 import { Badge, CheckIcon, Confidence, RunStatusBadge, SeverityBadge, StatusBadge } from "@/components/status/status";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, Input, SectionTitle, Textarea } from "@/components/ui/primitives";
-import { Table, Td, Th, THead } from "@/components/ui/table";
+import { SortTh, Table, Td, Th, THead, useClientSort } from "@/components/ui/table";
 import { api, ApiError } from "@/lib/api/client";
 import { useInvoiceAudit, useReviewAction, useVendors } from "@/lib/api/hooks";
 import type { Check as CheckT, ExtractedField, InvoiceDetail } from "@/lib/api/types";
@@ -63,6 +63,12 @@ export function FieldsPanel({ inv, threshold, onEvidence, onRun }: { inv: Invoic
   const fields = inv.extraction?.fields ?? {};
   const canEdit = inv.permissions.can_act && OPEN.includes(inv.status);
   const issues = inv.extraction?.issues ?? [];
+  const num = (v: string | null | undefined) => (v === null || v === undefined ? null : Number(v));
+  const lt = useClientSort(inv.lines, {
+    no: (l) => l.line_number, desc: (l) => l.description, qty: (l) => num(l.quantity), unit: (l) => l.unit,
+    rate: (l) => num(l.unit_price), gst: (l) => num(l.tax_rate), amount: (l) => num(l.line_subtotal),
+    conf: (l) => num(l.extraction_confidence),
+  }, { sort: "no", order: "asc" });
   const llm = inv.extraction?.llm as { status?: string; model?: string; accepted?: string[]; rejected?: { field: string; reason: string }[] } | null;
 
   return (
@@ -158,10 +164,12 @@ export function FieldsPanel({ inv, threshold, onEvidence, onRun }: { inv: Invoic
         <SectionTitle className="mb-2">Line items as extracted</SectionTitle>
         <div className="overflow-hidden rounded-md border border-line">
           <Table>
-            <THead><tr><Th>#</Th><Th>Description</Th><Th align="right">Qty</Th><Th>Unit</Th><Th align="right">Rate</Th>
-              <Th align="right">GST %</Th><Th align="right">Amount</Th><Th align="right">Conf.</Th><Th /></tr></THead>
+            <THead><tr><SortTh label="#" field="no" {...lt} /><SortTh label="Description" field="desc" {...lt} />
+              <SortTh label="Qty" field="qty" align="right" {...lt} /><SortTh label="Unit" field="unit" {...lt} />
+              <SortTh label="Rate" field="rate" align="right" {...lt} /><SortTh label="GST %" field="gst" align="right" {...lt} />
+              <SortTh label="Amount" field="amount" align="right" {...lt} /><SortTh label="Conf." field="conf" align="right" {...lt} /><Th /></tr></THead>
             <tbody>
-              {inv.lines.map((l) => (
+              {(lt.rows ?? []).map((l) => (
                 <tr key={l.id}>
                   <Td className="text-ink-3">{l.line_number}</Td>
                   <Td className="max-w-[280px]">{l.description}</Td>
@@ -196,11 +204,20 @@ export function ReconciliationPanel({ inv }: { inv: InvoiceDetail }) {
   const out = inv.latest_run?.stage_outputs?.FINANCIAL_RECONCILIATION as { match_mode: string | null; table: ReconRow[];
     summary: Record<string, unknown> } | undefined;
   const checks = inv.checks.filter((c) => c.stage === "FINANCIAL_RECONCILIATION");
+  const n = (v: string | number | null | undefined) => (v === null || v === undefined || v === "" ? null : Number(String(v).replace(/[^\d.-]/g, "")));
+  const rt = useClientSort(out?.table, {
+    line: (r) => r.invoice_line, desc: (r) => r.description, qty: (r) => n(r.quantity), ordered: (r) => n(r.ordered),
+    prev: (r) => n(r.previously_invoiced), remaining: (r) => n(r.remaining_before), received: (r) => n(r.received),
+    rate: (r) => n(r.unit_price), porate: (r) => n(r.po_unit_price), var: (r) => n(r.price_variance_pct), gst: (r) => n(r.tax_rate),
+  }, { sort: "line", order: "asc" });
+  const mt = useClientSort(checks.filter((c) => c.expected || c.actual), {
+    result: (c) => (c.status === "PASS" ? 1 : 0), check: (c) => c.name, subject: (c) => c.subject, actual: (c) => n(c.actual),
+    expected: (c) => n(c.expected), delta: (c) => n(c.delta), tol: (c) => c.threshold,
+  }, { sort: "result", order: "asc" });
   const failedFor = (code: string, line: number) => checks.some((c) => c.code === code && c.subject === `line ${line}` && c.status === "FAIL");
   if (!out) return <p className="p-6 text-center text-[13px] text-ink-3">Reconciliation has not run for this invoice{inv.status === "FAILED" ? " (processing failed before this stage)" : ""}.</p>;
   const s = out.summary as { po_number?: string; po_value?: string; previously_invoiced_value?: string; remaining_value_after?: string; grns?: string[]; po_type?: string };
   const threeWay = out.match_mode === "THREE_WAY";
-  const measured = checks.filter((c) => c.expected || c.actual);
   return (
     <div className="space-y-4 p-4">
       <div className="flex flex-wrap items-center gap-2">
@@ -222,12 +239,15 @@ export function ReconciliationPanel({ inv }: { inv: InvoiceDetail }) {
         <div className="overflow-hidden rounded-md border border-line">
           <Table>
             <THead><tr>
-              <Th>Line</Th><Th>Invoice ↔ PO description</Th><Th align="right">Inv qty</Th><Th align="right">Ordered</Th>
-              <Th align="right">Prev. invoiced</Th><Th align="right">Remaining</Th>{threeWay && <Th align="right">Received</Th>}
-              <Th align="right">Inv rate</Th><Th align="right">PO rate</Th><Th align="right">Var.</Th><Th align="right">GST</Th>
+              <SortTh label="Line" field="line" {...rt} /><SortTh label="Invoice ↔ PO description" field="desc" {...rt} />
+              <SortTh label="Inv qty" field="qty" align="right" {...rt} /><SortTh label="Ordered" field="ordered" align="right" {...rt} />
+              <SortTh label="Prev. invoiced" field="prev" align="right" {...rt} /><SortTh label="Remaining" field="remaining" align="right" {...rt} />
+              {threeWay && <SortTh label="Received" field="received" align="right" {...rt} />}
+              <SortTh label="Inv rate" field="rate" align="right" {...rt} /><SortTh label="PO rate" field="porate" align="right" {...rt} />
+              <SortTh label="Var." field="var" align="right" {...rt} /><SortTh label="GST" field="gst" align="right" {...rt} />
             </tr></THead>
             <tbody>
-              {out.table.map((r) => (
+              {(rt.rows ?? []).map((r) => (
                 <tr key={r.invoice_line}>
                   <Td className="whitespace-nowrap text-ink-3">{r.invoice_line}{r.matched ? ` → ${r.po_line}` : ""}</Td>
                   <Td className="max-w-[260px]">
@@ -254,10 +274,12 @@ export function ReconciliationPanel({ inv }: { inv: InvoiceDetail }) {
         <SectionTitle className="mb-2">Measured checks</SectionTitle>
         <div className="overflow-hidden rounded-md border border-line">
           <Table>
-            <THead><tr><Th>Result</Th><Th>Check</Th><Th>Subject</Th><Th align="right">Actual</Th><Th align="right">Expected</Th>
-              <Th align="right">Delta</Th><Th align="right">Tolerance</Th></tr></THead>
+            <THead><tr><SortTh label="Result" field="result" {...mt} /><SortTh label="Check" field="check" {...mt} />
+              <SortTh label="Subject" field="subject" {...mt} /><SortTh label="Actual" field="actual" align="right" {...mt} />
+              <SortTh label="Expected" field="expected" align="right" {...mt} /><SortTh label="Delta" field="delta" align="right" {...mt} />
+              <SortTh label="Tolerance" field="tol" align="right" {...mt} /></tr></THead>
             <tbody>
-              {measured.sort((a, b) => Number(a.status === "PASS") - Number(b.status === "PASS")).map((c) => (
+              {(mt.rows ?? []).map((c) => (
                 <tr key={c.id} className={cn(c.status !== "PASS" && c.outcome !== "NONE" && "bg-danger-soft/40")}>
                   <Td><CheckIcon status={c.status} outcome={c.outcome} /></Td>
                   <Td className="text-[12.5px]" title={c.message}>{c.name}</Td>

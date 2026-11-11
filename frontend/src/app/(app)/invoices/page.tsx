@@ -1,18 +1,25 @@
 "use client";
 import { Download, FileStack, Search, Upload, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
 import { PageHeader } from "@/components/layout/shell";
 import { PriorityMark, StatusBadge } from "@/components/status/status";
 import { Button } from "@/components/ui/button";
-import { Card, EmptyState, ErrorState, Input, Select } from "@/components/ui/primitives";
-import { Pagination, SkeletonRows, SortTh, Table, Td, Th, THead, Tr } from "@/components/ui/table";
+import { Avatar, Card, EmptyState, ErrorState, Input, Select } from "@/components/ui/primitives";
+import { Pagination, SkeletonRows, SortTh, Table, Td, THead, Tr } from "@/components/ui/table";
 import { qs } from "@/lib/api/client";
-import { useInvoices, useMe, useVendors } from "@/lib/api/hooks";
+import { useDashboard, useInvoices, useMe, useVendors } from "@/lib/api/hooks";
 import { ago, date, money } from "@/lib/format";
 import { useDebounced } from "@/lib/hooks/use-debounced";
+import { cn } from "@/lib/utils";
+
+const TABS = [
+  { value: "", label: "All" }, { value: "NEEDS_REVIEW", label: "Needs review" }, { value: "ON_HOLD", label: "On hold" },
+  { value: "READY_FOR_APPROVAL", label: "Ready" }, { value: "APPROVED", label: "Approved" },
+  { value: "REJECTED", label: "Rejected" }, { value: "FAILED", label: "Failed" },
+];
 
 const STATUSES = [
   { value: "", label: "All statuses" }, { value: "READY_FOR_APPROVAL", label: "Ready for approval" },
@@ -22,11 +29,13 @@ const STATUSES = [
   { value: "CANCELLED", label: "Cancelled" },
 ];
 
-export default function InvoicesPage() {
+function InvoicesList() {
   const router = useRouter();
+  const params = useSearchParams();
   const { data: me } = useMe();
-  const [q, setQ] = React.useState("");
-  const [status, setStatus] = React.useState("");
+  const { data: counts } = useDashboard(0);
+  const [q, setQ] = React.useState(params.get("q") ?? "");
+  const [status, setStatus] = React.useState(params.get("status") ?? "");
   const [priority, setPriority] = React.useState("");
   const [vendor, setVendor] = React.useState("");
   const [from, setFrom] = React.useState("");
@@ -49,7 +58,7 @@ export default function InvoicesPage() {
 
   function onSort(f: string) {
     if (sort === f) setOrder(order === "asc" ? "desc" : "asc");
-    else { setSort(f); setOrder("desc"); }
+    else { setSort(f); setOrder(f === "created_at" ? "desc" : "asc"); }
   }
   function clear() { setQ(""); setStatus(""); setPriority(""); setVendor(""); setFrom(""); setTo(""); setMinAmt(""); setMaxAmt(""); }
 
@@ -61,12 +70,25 @@ export default function InvoicesPage() {
           {me?.role !== "AUDITOR" && <Button asChild variant="primary"><Link href="/invoices/new"><Upload />Upload</Link></Button>}
         </>} />
       <Card>
-        <div className="flex flex-wrap items-end gap-2 border-b border-line p-3">
+        <div className="flex items-center gap-1 overflow-x-auto border-b border-line px-4" role="tablist" aria-label="Status">
+          {TABS.map((t) => {
+            const n = t.value ? counts?.status_counts[t.value] ?? 0 : Object.values(counts?.status_counts ?? {}).reduce((a, b) => a + b, 0);
+            return (
+              <button key={t.value} role="tab" aria-selected={status === t.value} onClick={() => setStatus(t.value)}
+                className={cn("relative -mb-px inline-flex h-12 items-center gap-2 whitespace-nowrap border-b-2 px-3 text-[13px] transition-colors",
+                  status === t.value ? "border-ink font-medium text-ink" : "border-transparent text-ink-3 hover:text-ink")}>
+                {t.label}
+                <span className={cn("num rounded-full px-2 py-0.5 text-[11px]", status === t.value ? "bg-ink text-bg" : "bg-surface-3 text-ink-2")}>{n}</span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap items-end gap-2 border-b border-line p-4">
           <div className="relative min-w-[240px] flex-1">
             <Search className="pointer-events-none absolute left-2.5 top-2 size-4 text-ink-3" />
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search invoice no., reference, vendor, PO…" className="pl-8" aria-label="Search" />
+            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search invoice no., reference, vendor, PO…" className="pl-8" aria-label="Search invoices" />
           </div>
-          <Select value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Status">
+          <Select value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Status" className="lg:hidden">
             {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
           </Select>
           <Select value={priority} onChange={(e) => setPriority(e.target.value)} aria-label="Priority">
@@ -93,21 +115,23 @@ export default function InvoicesPage() {
             <Table>
               <THead><tr>
                 <SortTh label="Reference" field="reference" sort={sort} order={order} onSort={onSort} />
-                <Th>Vendor</Th><Th>Invoice no.</Th>
+                <SortTh label="Vendor" field="vendor" sort={sort} order={order} onSort={onSort} />
+                <SortTh label="Invoice no." field="invoice_number" sort={sort} order={order} onSort={onSort} />
                 <SortTh label="Invoice date" field="invoice_date" sort={sort} order={order} onSort={onSort} />
-                <Th>PO</Th>
+                <SortTh label="PO" field="po" sort={sort} order={order} onSort={onSort} />
                 <SortTh label="Amount" field="grand_total" sort={sort} order={order} onSort={onSort} align="right" />
                 <SortTh label="Status" field="status" sort={sort} order={order} onSort={onSort} />
                 <SortTh label="Priority" field="priority" sort={sort} order={order} onSort={onSort} />
-                <Th>Next action</Th>
+                <SortTh label="Next action" field="next_action" sort={sort} order={order} onSort={onSort} />
                 <SortTh label="Received" field="created_at" sort={sort} order={order} onSort={onSort} />
               </tr></THead>
               <tbody>
                 {isLoading ? <SkeletonRows cols={10} /> : data?.items.map((i) => (
                   <Tr key={i.id} onClick={() => router.push(`/invoices/${i.id}`)}>
                     <Td className="font-medium">{i.reference}</Td>
-                    <Td><div className="max-w-[220px] truncate">{i.vendor?.legal_name ?? i.vendor_name_raw ?? <span className="text-ink-3">Unresolved</span>}</div>
-                      {i.vendor && <div className="text-[11.5px] text-ink-3">{i.vendor.vendor_code}</div>}</Td>
+                    <Td><div className="flex items-center gap-2.5"><Avatar name={i.vendor?.legal_name ?? i.vendor_name_raw ?? "?"} />
+                      <div className="min-w-0"><div className="max-w-[210px] truncate font-medium">{i.vendor?.legal_name ?? i.vendor_name_raw ?? <span className="text-ink-3">Unresolved</span>}</div>
+                      {i.vendor && <div className="text-[11.5px] text-ink-3">{i.vendor.vendor_code}</div>}</div></div></Td>
                     <Td className="whitespace-nowrap font-mono text-[12px]">{i.invoice_number ?? <span className="text-ink-3">—</span>}</Td>
                     <Td className="num whitespace-nowrap">{date(i.invoice_date)}</Td>
                     <Td className="whitespace-nowrap font-mono text-[12px]">{i.po_number ?? "—"}</Td>
@@ -130,4 +154,8 @@ export default function InvoicesPage() {
       </Card>
     </div>
   );
+}
+
+export default function InvoicesPage() {
+  return <React.Suspense><InvoicesList /></React.Suspense>;
 }

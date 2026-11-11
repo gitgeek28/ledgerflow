@@ -5,7 +5,7 @@ async function signIn(page: import("@playwright/test").Page, name = "Aisha Rao")
   await page.getByRole("radio", { name: new RegExp(name) }).click();
   await page.getByLabel("Demo password").fill("ledgerflow-demo");
   await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page.getByRole("heading", { name: "Overview" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Good (morning|afternoon|evening)/ })).toBeVisible();
 }
 
 test("upload → live run → evidence → human review → audit", async ({ page }) => {
@@ -17,7 +17,7 @@ test("upload → live run → evidence → human review → audit", async ({ pag
 
   // Live run view driven by SSE events persisted by the backend
   await page.waitForURL(/\/runs\//);
-  await expect(page.getByText("Workflow stages")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Workflow" })).toBeVisible();
   await expect(page.getByText("PO-450109 matched by reference")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Decision" })).toBeVisible();
   await expect(page.getByText(/Unit price variance above tolerance \(line 1: 43,500.00 vs 42,000.00\)/).first()).toBeVisible();
@@ -58,4 +58,16 @@ test("auditor is read-only and theme toggles to dark", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Upload invoices" })).toHaveCount(0);
   await page.getByRole("button", { name: "Toggle colour theme" }).click();
   await expect(page.locator("html")).toHaveClass(/dark/);
+});
+
+test("columns sort and the command palette searches", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/invoices");
+  await page.getByRole("button", { name: "Amount" }).click();
+  await expect(page.locator("th[aria-sort='ascending']")).toHaveCount(1);
+  await page.getByRole("button", { name: "Amount" }).click();
+  await expect(page.locator("th[aria-sort='descending']")).toHaveCount(1);
+  await page.keyboard.press("ControlOrMeta+k");
+  await page.getByLabel("Search everything").fill("PO-450110");
+  await expect(page.getByRole("option").first()).toBeVisible();
 });

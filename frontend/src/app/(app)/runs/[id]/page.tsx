@@ -10,7 +10,7 @@ import { PageHeader } from "@/components/layout/shell";
 import { ReasonChip, RunStatusBadge, StatusBadge } from "@/components/status/status";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, ErrorState, Kv, Skeleton } from "@/components/ui/primitives";
-import { buildStages, RunTimeline } from "@/components/workflow/run-timeline";
+import { buildStages, RunStepper, RunTimeline } from "@/components/workflow/run-timeline";
 import { api, ApiError } from "@/lib/api/client";
 import { keys, useInvoice, useMe, useRun } from "@/lib/api/hooks";
 import type { Run } from "@/lib/api/types";
@@ -97,10 +97,12 @@ export default function RunPage() {
       />
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
         <Card>
-          <CardHeader title="Workflow stages"
-            description="Every row is written by the backend as the stage executes; nothing here is simulated."
+          <CardHeader title="Workflow"
+            description="Every step is written by the backend as it executes; nothing here is simulated."
             action={<span className="text-[12px] text-ink-3">Elapsed <span className="font-medium text-ink"><Elapsed from={startedAt} to={endedAt} /></span></span>} />
-          <div className="px-4 pt-4">
+          <RunStepper stages={stages} status={status} />
+          <div className="mx-5 my-4 border-t border-line" />
+          <div className="px-5">
             <RunTimeline stages={stages} outputs={run.stage_outputs} previousAttempt={prevAttempt} />
           </div>
         </Card>

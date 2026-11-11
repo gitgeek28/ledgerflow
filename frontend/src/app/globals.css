@@ -6,30 +6,34 @@
    Light is the default. Warm neutral canvas, white surfaces, navy ink, one indigo accent.
    Semantic colours: green = passed/ready, amber = review/hold, red = blocker/rejected, grey = info. */
 :root {
-  --bg: #f6f5f1;
+  --bg: #f4f5f7;
   --surface: #ffffff;
-  --surface-2: #faf9f6;
-  --surface-3: #f1efea;
-  --line: #e6e3dc;
-  --line-strong: #d6d2c8;
-  --ink: #161d2b;
-  --ink-2: #445066;
-  --ink-3: #727a8a;
-  --accent: #3243b8;
-  --accent-hover: #283799;
-  --accent-soft: #eceefa;
+  --surface-2: #f9fafb;
+  --surface-3: #f1f2f5;
+  --line: #e7e8ec;
+  --line-strong: #d7d9df;
+  --ink: #111318;
+  --ink-2: #474c57;
+  --ink-3: #7b808b;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef0ff;
   --accent-ink: #ffffff;
-  --success: #16794a;
-  --success-soft: #e6f4ec;
-  --warning: #9a5a06;
-  --warning-soft: #fcf1de;
-  --danger: #b42318;
+  --primary: #111318;
+  --primary-hover: #2a2d35;
+  --primary-ink: #ffffff;
+  --success: #138a52;
+  --success-soft: #e7f6ee;
+  --warning: #a35f00;
+  --warning-soft: #fdf3e1;
+  --danger: #c4321f;
   --danger-soft: #fdecea;
-  --neutral: #5b6475;
-  --neutral-soft: #eff0f2;
-  --focus: #3243b8;
-  --shadow: 0 1px 2px rgba(22, 29, 43, 0.05), 0 1px 1px rgba(22, 29, 43, 0.03);
-  --highlight: rgba(50, 67, 184, 0.16);
+  --neutral: #5f6571;
+  --neutral-soft: #f0f1f4;
+  --focus: #4f46e5;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.05);
+  --shadow-lg: 0 12px 32px -8px rgba(16, 24, 40, 0.14), 0 4px 8px -4px rgba(16, 24, 40, 0.06);
+  --highlight: rgba(79, 70, 229, 0.16);
   /* chart series (validated: lightness band, CVD separation, contrast) */
   --chart-ok: #16794a;
   --chart-exception: #c98a1f;
@@ -37,30 +41,34 @@
 }
 
 .dark {
-  --bg: #0e1117;
-  --surface: #151922;
-  --surface-2: #191e28;
-  --surface-3: #1f2531;
-  --line: #262c38;
-  --line-strong: #333b49;
-  --ink: #e8eaef;
-  --ink-2: #b0b7c4;
-  --ink-3: #808999;
-  --accent: #8e9bf6;
-  --accent-hover: #a7b1f8;
-  --accent-soft: #1d2340;
-  --accent-ink: #0e1117;
+  --bg: #0b0d12;
+  --surface: #13161d;
+  --surface-2: #171a22;
+  --surface-3: #1e222c;
+  --line: #252a35;
+  --line-strong: #323846;
+  --ink: #eceef2;
+  --ink-2: #b3b8c3;
+  --ink-3: #828896;
+  --accent: #8f88ff;
+  --accent-hover: #a7a1ff;
+  --accent-soft: #1f1d3d;
+  --accent-ink: #0b0d12;
+  --primary: #eceef2;
+  --primary-hover: #ffffff;
+  --primary-ink: #0b0d12;
   --success: #4fc48b;
-  --success-soft: #11281d;
+  --success-soft: #10271c;
   --warning: #e6a74e;
-  --warning-soft: #2c2213;
+  --warning-soft: #2b2112;
   --danger: #f2756b;
-  --danger-soft: #331a1b;
-  --neutral: #9aa3b2;
-  --neutral-soft: #20262f;
-  --focus: #8e9bf6;
+  --danger-soft: #321a1b;
+  --neutral: #9aa1ae;
+  --neutral-soft: #1f232c;
+  --focus: #8f88ff;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --highlight: rgba(142, 155, 246, 0.22);
+  --shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+  --highlight: rgba(143, 136, 255, 0.22);
   --chart-ok: #33a06c;
   --chart-exception: #c27b22;
   color-scheme: dark;
@@ -80,6 +88,9 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
   --color-accent-ink: var(--accent-ink);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-ink: var(--primary-ink);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
@@ -91,6 +102,7 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
   --shadow-card: var(--shadow);
+  --shadow-pop: var(--shadow-lg);
   --radius-card: 10px;
 }
 
@@ -103,6 +115,7 @@ body {
 body {
   font-family: var(--font-sans);
   font-size: 14px;
+  letter-spacing: -0.003em;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "cv11", "ss01";
@@ -141,8 +154,23 @@ body {
 }
 .lf-enter { animation: lf-enter 220ms ease-out both; }
 
+@keyframes lf-flow {
+  from { background-position: 0 0; }
+  to { background-position: 28px 0; }
+}
+.lf-flow {
+  background-image: repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 14px);
+  background-size: 28px 100%;
+  animation: lf-flow 0.8s linear infinite;
+}
+@keyframes lf-ring {
+  0% { box-shadow: 0 0 0 0 var(--highlight); }
+  100% { box-shadow: 0 0 0 10px transparent; }
+}
+.lf-ring { animation: lf-ring 1.4s ease-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
-  .lf-pulse, .lf-enter { animation: none; }
+  .lf-pulse, .lf-enter, .lf-flow, .lf-ring { animation: none; }
 }
 
 /* react-pdf canvas */

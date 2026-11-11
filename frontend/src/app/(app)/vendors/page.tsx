@@ -6,8 +6,8 @@ import * as React from "react";
 import { PageHeader } from "@/components/layout/shell";
 import { VendorStatus } from "@/components/status/status";
 import { Segmented } from "@/components/ui/overlays";
-import { Card, EmptyState, ErrorState, Input, Mono } from "@/components/ui/primitives";
-import { Pagination, SkeletonRows, Table, Td, Th, THead, Tr } from "@/components/ui/table";
+import { Avatar, Card, EmptyState, ErrorState, Input, Mono } from "@/components/ui/primitives";
+import { SkeletonRows, SortTh, Table, Td, THead, Tr, useClientSort } from "@/components/ui/table";
 import { useVendors } from "@/lib/api/hooks";
 import { money } from "@/lib/format";
 
@@ -22,10 +22,15 @@ export default function VendorsPage() {
   const router = useRouter();
   const [search, setSearch] = React.useState("");
   const [status, setStatus] = React.useState("");
-  const [page, setPage] = React.useState(1);
+  const page = 1;
   const q = useDebounced(search);
-  React.useEffect(() => setPage(1), [q, status]);
   const { data, isLoading, isError, error, refetch } = useVendors({ q: q || undefined, status: status || undefined, page });
+  const t = useClientSort(data?.items, {
+    code: (v) => v.vendor_code, name: (v) => v.legal_name, location: (v) => v.city, gstin: (v) => v.tax_id_masked,
+    status: (v) => v.approved_status, pos: (v) => v.open_po_count, invoices: (v) => v.invoice_count,
+    value: (v) => Number(v.open_invoice_value), bank: (v) => v.bank_details_version,
+  }, { sort: "code", order: "asc" });
+  const sp = { sort: t.sort, order: t.order, onSort: t.onSort };
 
   return (
     <div>
@@ -44,18 +49,21 @@ export default function VendorsPage() {
           <Table>
             <THead>
               <tr>
-                <Th>Code</Th><Th>Vendor</Th><Th>Location</Th><Th>GSTIN</Th><Th>Status</Th>
-                <Th align="right">Open POs</Th><Th align="right">Invoices</Th><Th align="right">Open invoice value</Th>
-                <Th>Bank</Th>
+                <SortTh label="Code" field="code" {...sp} /><SortTh label="Vendor" field="name" {...sp} />
+                <SortTh label="Location" field="location" {...sp} /><SortTh label="GSTIN" field="gstin" {...sp} />
+                <SortTh label="Status" field="status" {...sp} /><SortTh label="Open POs" field="pos" align="right" {...sp} />
+                <SortTh label="Invoices" field="invoices" align="right" {...sp} />
+                <SortTh label="Open invoice value" field="value" align="right" {...sp} /><SortTh label="Bank" field="bank" {...sp} />
               </tr>
             </THead>
             <tbody>
-              {isLoading ? <SkeletonRows cols={9} /> : data?.items.map((v) => (
+              {isLoading ? <SkeletonRows cols={9} /> : t.rows?.map((v) => (
                 <Tr key={v.id} onClick={() => router.push(`/vendors/${v.id}`)}>
                   <Td><Mono className="text-ink-2">{v.vendor_code}</Mono></Td>
                   <Td>
-                    <div className="max-w-[260px] truncate">{v.legal_name}</div>
-                    <div className="text-[12px] text-ink-3">{v.category}</div>
+                    <div className="flex items-center gap-2.5"><Avatar name={v.legal_name} /><div className="min-w-0">
+                    <div className="max-w-[260px] truncate font-medium">{v.legal_name}</div>
+                    <div className="text-[12px] text-ink-3">{v.category}</div></div></div>
                   </Td>
                   <Td className="whitespace-nowrap text-ink-2">{v.city}{v.state_code ? ` · ${v.state_code}` : ""}</Td>
                   <Td><Mono className="text-ink-2">{v.tax_id_masked ?? "—"}</Mono></Td>
@@ -75,11 +83,7 @@ export default function VendorsPage() {
             <EmptyState icon={<Building2 />} title="No vendors match"
               description={q || status ? "Try a different search or status filter." : "Run the seed command to load demo vendors."} />
           )}
-          {data && data.total > 0 && (
-            <div className="border-t border-line">
-              <Pagination page={page} pageSize={data.page_size} total={data.total} onPage={setPage} />
-            </div>
-          )}
+          {data && data.total > 0 && <div className="px-4 py-3 text-[12px] text-ink-3">{data.total} vendor{data.total === 1 ? "" : "s"}</div>}
         </Card>
       )}
     </div>

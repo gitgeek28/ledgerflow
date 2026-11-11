@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { PageHeader } from "@/components/layout/shell";
 import { StatusBadge, VendorStatus } from "@/components/status/status";
 import { Card, CardHeader, EmptyState, ErrorState, Kv, Mono, Skeleton } from "@/components/ui/primitives";
-import { Table, Td, Th, THead, Tr } from "@/components/ui/table";
+import { SortTh, Table, Td, THead, Tr, useClientSort } from "@/components/ui/table";
 import { useVendor } from "@/lib/api/hooks";
 import { ago, date, humanize, money } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,14 @@ export default function VendorDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { data, isLoading, isError, error, refetch } = useVendor(id);
+  const pt = useClientSort(data?.purchase_orders, {
+    po: (p) => p.po_number, desc: (p) => p.description, type: (p) => p.po_type, date: (p) => p.po_date,
+    value: (p) => Number(p.subtotal), remaining: (p) => Number(p.remaining_value), status: (p) => p.status,
+  }, { sort: "date", order: "desc" });
+  const vt = useClientSort(data?.invoices, {
+    ref: (i) => i.reference, no: (i) => i.invoice_number, date: (i) => i.invoice_date, po: (i) => i.po_number,
+    amount: (i) => (i.grand_total === null ? null : Number(i.grand_total)), status: (i) => i.status, received: (i) => i.created_at,
+  }, { sort: "received", order: "desc" });
 
   if (isError) return <ErrorState error={error} onRetry={() => refetch()} />;
   if (isLoading || !data) {
@@ -105,11 +113,13 @@ export default function VendorDetailPage() {
         {pos.length === 0 ? <EmptyState icon={<ClipboardList />} title="No purchase orders" /> : (
           <Table>
             <THead>
-              <tr><Th>PO number</Th><Th>Description</Th><Th>Type</Th><Th>PO date</Th><Th align="right">Value (pre-tax)</Th>
-                <Th align="right">Remaining</Th><Th>Status</Th></tr>
+              <tr><SortTh label="PO number" field="po" {...pt} /><SortTh label="Description" field="desc" {...pt} />
+                <SortTh label="Type" field="type" {...pt} /><SortTh label="PO date" field="date" {...pt} />
+                <SortTh label="Value (pre-tax)" field="value" align="right" {...pt} />
+                <SortTh label="Remaining" field="remaining" align="right" {...pt} /><SortTh label="Status" field="status" {...pt} /></tr>
             </THead>
             <tbody>
-              {pos.map((po) => (
+              {(pt.rows ?? []).map((po) => (
                 <Tr key={po.id} onClick={() => router.push(`/purchase-orders/${po.id}`)}>
                   <Td><Mono>{po.po_number}</Mono></Td>
                   <Td className="max-w-[300px] truncate text-ink-2">{po.description}</Td>
@@ -135,11 +145,13 @@ export default function VendorDetailPage() {
         {invoices.length === 0 ? <EmptyState icon={<FileStack />} title="No invoices yet" /> : (
           <Table>
             <THead>
-              <tr><Th>Reference</Th><Th>Invoice no.</Th><Th>Invoice date</Th><Th>PO</Th><Th align="right">Amount</Th>
-                <Th>Status</Th><Th>Received</Th></tr>
+              <tr><SortTh label="Reference" field="ref" {...vt} /><SortTh label="Invoice no." field="no" {...vt} />
+                <SortTh label="Invoice date" field="date" {...vt} /><SortTh label="PO" field="po" {...vt} />
+                <SortTh label="Amount" field="amount" align="right" {...vt} /><SortTh label="Status" field="status" {...vt} />
+                <SortTh label="Received" field="received" {...vt} /></tr>
             </THead>
             <tbody>
-              {invoices.map((i) => (
+              {(vt.rows ?? []).map((i) => (
                 <Tr key={i.id} onClick={() => router.push(`/invoices/${i.id}`)}>
                   <Td><Link href={`/invoices/${i.id}`} onClick={(e) => e.stopPropagation()}
                     className="font-mono text-[12px] text-accent hover:underline">{i.reference}</Link></Td>

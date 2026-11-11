@@ -6,7 +6,7 @@ from decimal import Decimal
 
 from fastapi import APIRouter, Depends, File, Query, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
-from sqlalchemy import asc, desc, func, or_, select
+from sqlalchemy import asc, case, desc, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import Paging
@@ -25,8 +25,12 @@ from app.services.storage import get_storage
 
 router = APIRouter(prefix="/invoices", tags=["invoices"])
 
-SORTS = {"created_at": Invoice.created_at, "invoice_date": Invoice.invoice_date, "grand_total": Invoice.grand_total,
-         "status": Invoice.status, "reference": Invoice.reference, "priority": Invoice.priority}
+SORTS = {"created_at": Invoice.created_at, "invoice_date": Invoice.invoice_date, "due_date": Invoice.due_date,
+         "grand_total": Invoice.grand_total, "status": Invoice.status, "reference": Invoice.reference,
+         "priority": Invoice.priority, "invoice_number": Invoice.invoice_number, "next_action": Invoice.next_action,
+         "decided_at": Invoice.decided_at, "vendor": func.coalesce(Vendor.legal_name, Invoice.vendor_name_raw),
+         "po": func.coalesce(PurchaseOrder.po_number, Invoice.po_reference_raw)}
+PRIORITY_RANK = case((Invoice.priority == "HIGH", 0), (Invoice.priority == "NORMAL", 1), else_=2)
 
 
 def _get(db: Session, invoice_id: uuid.UUID) -> Invoice:
@@ -96,10 +100,10 @@ async def upload_batch(files: list[UploadFile] = File(...), db: Session = Depend
 
 
 def _filtered(q, *, search, status, vendor_id, priority, date_from, date_to, min_amount, max_amount, assignee_id):
+    q = q.outerjoin(Vendor, Invoice.vendor_id == Vendor.id).outerjoin(PurchaseOrder, Invoice.po_id == PurchaseOrder.id)
     if search:
         like = f"%{search.strip()}%"
-        q = q.outerjoin(Vendor, Invoice.vendor_id == Vendor.id).outerjoin(
-            PurchaseOrder, Invoice.po_id == PurchaseOrder.id).where(or_(
+        q = q.where(or_(
                 Invoice.invoice_number.ilike(like), Invoice.reference.ilike(like),
                 Invoice.original_filename.ilike(like), Vendor.legal_name.ilike(like),
                 Invoice.vendor_name_raw.ilike(like), PurchaseOrder.po_number.ilike(like),
@@ -139,7 +143,9 @@ def list_invoices(q: str | None = None, status: list[str] | None = Query(None), 
                   db: Session = Depends(get_db), _: User = Depends(current_user)):
     query = _list_query(q, status, vendor_id, priority, date_from, date_to, min_amount, max_amount, assignee_id)
     total = db.scalar(select(func.count()).select_from(query.order_by(None).subquery()))
-    col = SORTS.get(sort, Invoice.created_at)
+    col = PRIORITY_RANK if sort == "priority" else SORTS.get(sort, Invoice.created_at)
+    if sort == "priority":
+        order = "asc" if order == "desc" else "desc"  # "desc" = most urgent first
     query = query.order_by((asc if order == "asc" else desc)(col).nulls_last(), desc(Invoice.created_at))
     rows = db.scalars(query.offset(paging.offset).limit(paging.page_size)).all()
     return api.Page(items=[invoice_item(i) for i in rows], total=total, page=paging.page,

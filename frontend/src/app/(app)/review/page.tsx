@@ -9,8 +9,8 @@ import { PageHeader } from "@/components/layout/shell";
 import { PriorityMark, ReasonChip, StatusBadge } from "@/components/status/status";
 import { Button } from "@/components/ui/button";
 import { Segmented } from "@/components/ui/overlays";
-import { Card, EmptyState, ErrorState } from "@/components/ui/primitives";
-import { SkeletonRows, Table, Td, Th, THead, Tr } from "@/components/ui/table";
+import { Avatar, Card, EmptyState, ErrorState } from "@/components/ui/primitives";
+import { SkeletonRows, SortTh, Table, Td, Th, THead, Tr, useClientSort } from "@/components/ui/table";
 import { api } from "@/lib/api/client";
 import { useMe, useReviewQueue } from "@/lib/api/hooks";
 import { age, money } from "@/lib/format";
@@ -41,7 +41,14 @@ function ReviewQueue() {
     qc.invalidateQueries({ queryKey: ["queue"] });
   }
 
-  const rows = data ?? [];
+  const PRIO: Record<string, number> = { HIGH: 0, NORMAL: 1, LOW: 2 };
+  const t = useClientSort(data, {
+    priority: (i) => PRIO[i.priority] ?? 3, invoice: (i) => i.reference, exception: (i) => i.reason_codes[0] ?? "",
+    amount: (i) => (i.grand_total === null ? null : Number(i.grand_total)), status: (i) => i.status,
+    assignee: (i) => i.assignee?.name ?? "", next: (i) => i.next_action ?? "", age: (i) => i.age_hours ?? 0,
+  }, { sort: "priority", order: "asc" });
+  const sp = { sort: t.sort, order: t.order, onSort: t.onSort };
+  const rows = t.rows ?? [];
   const allChecked = rows.length > 0 && rows.every((r) => selected.has(r.id));
   const canAct = me?.role !== "AUDITOR";
 
@@ -63,17 +70,20 @@ function ReviewQueue() {
             <THead><tr>
               {canAct && <Th className="w-8"><input type="checkbox" aria-label="Select all" checked={allChecked}
                 onChange={() => setSelected(allChecked ? new Set() : new Set(rows.map((r) => r.id)))} /></Th>}
-              <Th>Priority</Th><Th>Invoice</Th><Th>Exception</Th><Th align="right">Amount at stake</Th><Th>Status</Th>
-              <Th>Assignee</Th><Th>Next action</Th><Th align="right">Age</Th>
+              <SortTh label="Priority" field="priority" {...sp} /><SortTh label="Invoice" field="invoice" {...sp} />
+              <SortTh label="Exception" field="exception" {...sp} /><SortTh label="Amount at stake" field="amount" align="right" {...sp} />
+              <SortTh label="Status" field="status" {...sp} /><SortTh label="Assignee" field="assignee" {...sp} />
+              <SortTh label="Next action" field="next" {...sp} /><SortTh label="Age" field="age" align="right" {...sp} />
             </tr></THead>
             <tbody>
               {isLoading ? <SkeletonRows cols={9} /> : rows.map((i) => (
-                <Tr key={i.id} onClick={() => router.push(`/invoices/${i.id}`)} className={cn(i.priority === "HIGH" && "bg-danger-soft/40")}>
+                <Tr key={i.id} onClick={() => router.push(`/invoices/${i.id}`)} className={cn(i.priority === "HIGH" && "bg-danger-soft/30")}>
                   {canAct && <Td onClick={(e) => e.stopPropagation()}><input type="checkbox" aria-label={`Select ${i.reference}`}
                     checked={selected.has(i.id)} onChange={() => setSelected((s) => { const n = new Set(s); if (n.has(i.id)) n.delete(i.id); else n.add(i.id); return n; })} /></Td>}
                   <Td><PriorityMark priority={i.priority} /></Td>
-                  <Td><div className="font-medium">{i.reference}</div>
-                    <div className="max-w-[200px] truncate text-[12px] text-ink-3">{i.vendor?.legal_name ?? i.vendor_name_raw ?? i.original_filename}</div></Td>
+                  <Td><div className="flex items-center gap-2.5"><Avatar name={i.vendor?.legal_name ?? i.vendor_name_raw ?? "?"} /><div className="min-w-0">
+                    <div className="font-medium">{i.reference}</div>
+                    <div className="max-w-[200px] truncate text-[12px] text-ink-3">{i.vendor?.legal_name ?? i.vendor_name_raw ?? i.original_filename}</div></div></div></Td>
                   <Td><div className="flex flex-wrap gap-1">{i.reason_codes.slice(0, 2).map((c) => <ReasonChip key={c} code={c} />)}
                     {i.reason_codes.length > 2 && <span className="text-[12px] text-ink-3">+{i.reason_codes.length - 2}</span>}</div></Td>
                   <Td align="right" className="whitespace-nowrap">{money(i.grand_total, i.currency)}</Td>

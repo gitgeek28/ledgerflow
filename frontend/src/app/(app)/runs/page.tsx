@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/layout/shell";
 import { RunStatusBadge, StatusBadge } from "@/components/status/status";
 import { Segmented } from "@/components/ui/overlays";
 import { Card, EmptyState, ErrorState } from "@/components/ui/primitives";
-import { Pagination, SkeletonRows, Table, Td, Th, THead, Tr } from "@/components/ui/table";
+import { Pagination, SkeletonRows, SortTh, Table, Td, THead, Tr } from "@/components/ui/table";
 import { useRuns } from "@/lib/api/hooks";
 import { ago, ms } from "@/lib/format";
 
@@ -18,15 +18,19 @@ export default function RunsPage() {
   const router = useRouter();
   const [status, setStatus] = React.useState<Filter>("ALL");
   const [page, setPage] = React.useState(1);
-  React.useEffect(() => setPage(1), [status]);
-  const { data, isLoading, isError, error, refetch } = useRuns({ status: status === "ALL" ? undefined : status, page });
+  const [sort, setSort] = React.useState("created_at");
+  const [order, setOrder] = React.useState("desc");
+  React.useEffect(() => setPage(1), [status, sort, order]);
+  const { data, isLoading, isError, error, refetch } = useRuns({ status: status === "ALL" ? undefined : status, page, sort, order });
+  const onSort = (f: string) => { if (f === sort) setOrder(order === "asc" ? "desc" : "asc"); else { setSort(f); setOrder(f === "created_at" ? "desc" : "asc"); } };
+  const sp = { sort, order, onSort };
 
   return (
     <div>
       <PageHeader title="Processing runs"
         description="Each run is one execution of the workflow for an invoice. Retries and re-evaluations after a review action create new runs; earlier runs are kept." />
       <Card>
-        <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2.5">
+        <div className="flex flex-wrap items-center gap-2 border-b border-line px-4 py-3">
           <Segmented<Filter> value={status} onChange={setStatus} options={[
             { value: "ALL", label: "All" }, { value: "QUEUED", label: "Queued" }, { value: "RUNNING", label: "Running" },
             { value: "COMPLETED", label: "Completed" }, { value: "FAILED", label: "Failed" }]} />
@@ -39,8 +43,11 @@ export default function RunsPage() {
             <Table>
               <THead>
                 <tr>
-                  <Th>Run</Th><Th>Invoice</Th><Th>Vendor</Th><Th>Trigger</Th><Th>Status</Th><Th>Decision</Th>
-                  <Th align="right">Processing</Th><Th>Started</Th><Th>Extractor</Th>
+                  <SortTh label="Run" field="attempt" {...sp} /><SortTh label="Invoice" field="invoice" {...sp} />
+                  <SortTh label="Vendor" field="vendor" {...sp} /><SortTh label="Trigger" field="trigger" {...sp} />
+                  <SortTh label="Status" field="status" {...sp} /><SortTh label="Decision" field="decision" {...sp} />
+                  <SortTh label="Processing" field="duration_ms" align="right" {...sp} />
+                  <SortTh label="Started" field="created_at" {...sp} /><SortTh label="Extractor" field="extractor" {...sp} />
                 </tr>
               </THead>
               <tbody>

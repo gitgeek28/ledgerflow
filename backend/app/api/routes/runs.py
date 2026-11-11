@@ -4,14 +4,14 @@ import uuid
 
 from fastapi import APIRouter, Depends, Header, Query, Request
 from fastapi.responses import StreamingResponse
-from sqlalchemy import desc, func, select
+from sqlalchemy import asc, desc, func, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import Paging
 from app.api.serializers import run_out
 from app.core.errors import Conflict, InvalidTransition, NotFound
 from app.core.security import OPERATOR, current_user
-from app.db.models import Invoice, ProcessingRun, RunEvent, User
+from app.db.models import Invoice, ProcessingRun, RunEvent, User, Vendor
 from app.db.session import SessionLocal, get_db
 from app.schemas import api
 from app.services import audit
@@ -20,10 +20,18 @@ from app.services.ingestion import create_run
 router = APIRouter(prefix="/runs", tags=["runs"])
 
 
+RUN_SORTS = {"created_at": ProcessingRun.created_at, "status": ProcessingRun.status,
+             "decision": ProcessingRun.decision, "duration_ms": ProcessingRun.duration_ms,
+             "trigger": ProcessingRun.trigger, "attempt": ProcessingRun.attempt, "extractor": ProcessingRun.extractor,
+             "invoice": Invoice.reference, "vendor": func.coalesce(Vendor.legal_name, Invoice.vendor_name_raw)}
+
+
 @router.get("", response_model=api.Page[api.RunOut])
 def list_runs(status: str | None = None, trigger: str | None = None, invoice_id: uuid.UUID | None = None,
+              sort: str = "created_at", order: str = Query("desc", pattern="^(asc|desc)$"),
               paging: Paging = Depends(), db: Session = Depends(get_db), _: User = Depends(current_user)):
-    q = select(ProcessingRun)
+    q = (select(ProcessingRun).join(Invoice, Invoice.id == ProcessingRun.invoice_id)
+         .outerjoin(Vendor, Vendor.id == Invoice.vendor_id))
     if status:
         q = q.where(ProcessingRun.status == status)
     if trigger:
@@ -31,7 +39,9 @@ def list_runs(status: str | None = None, trigger: str | None = None, invoice_id:
     if invoice_id:
         q = q.where(ProcessingRun.invoice_id == invoice_id)
     total = db.scalar(select(func.count()).select_from(q.subquery()))
-    rows = db.scalars(q.order_by(desc(ProcessingRun.created_at)).offset(paging.offset).limit(paging.page_size)).all()
+    col = RUN_SORTS.get(sort, ProcessingRun.created_at)
+    q = q.order_by((asc if order == "asc" else desc)(col).nulls_last(), desc(ProcessingRun.created_at))
+    rows = db.scalars(q.offset(paging.offset).limit(paging.page_size)).all()
     return api.Page(items=[run_out(db, r) for r in rows], total=total, page=paging.page, page_size=paging.page_size)
 
 

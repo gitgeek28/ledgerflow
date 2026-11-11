@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { PageHeader } from "@/components/layout/shell";
 import { Badge, StatusBadge } from "@/components/status/status";
 import { Card, CardHeader, EmptyState, ErrorState, Kv, Mono, Skeleton } from "@/components/ui/primitives";
-import { Table, Td, Th, THead, Tr } from "@/components/ui/table";
+import { SortTh, Table, Td, THead, Tr, useClientSort } from "@/components/ui/table";
 import { usePO } from "@/lib/api/hooks";
 import { date, humanize, money, qty } from "@/lib/format";
 
@@ -15,6 +15,20 @@ import { ConsumptionBar, POStatusBadge } from "../_shared";
 export default function PODetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: po, isLoading, isError, error, refetch } = usePO(id);
+  const n = (v: string | null | undefined) => (v === null || v === undefined ? null : Number(v));
+  const lt = useClientSort(po?.lines, {
+    no: (l) => l.line_number, code: (l) => l.item_code, desc: (l) => l.description, unit: (l) => l.unit,
+    price: (l) => n(l.unit_price), gst: (l) => n(l.tax_rate), ordered: (l) => n(l.quantity_ordered),
+    received: (l) => n(l.quantity_received), invoiced: (l) => n(l.quantity_invoiced), remaining: (l) => n(l.quantity_remaining),
+  }, { sort: "no", order: "asc" });
+  const gt = useClientSort(po?.goods_receipts, {
+    grn: (g) => g.grn_number, date: (g) => g.received_date, by: (g) => g.received_by, wh: (g) => g.warehouse,
+    lines: (g) => g.lines.length,
+  }, { sort: "date", order: "asc" });
+  const it = useClientSort(po?.invoices, {
+    ref: (i) => i.reference, no: (i) => i.invoice_number, status: (i) => i.status, amount: (i) => n(i.amount_consumed),
+    cons: (i) => i.consumption,
+  }, { sort: "ref", order: "asc" });
 
   if (isError) return <ErrorState error={error} onRetry={() => refetch()} />;
   if (isLoading || !po) {
@@ -71,13 +85,15 @@ export default function PODetailPage() {
         <Table>
           <THead>
             <tr>
-              <Th>#</Th><Th>Item code</Th><Th>Description</Th><Th>Unit</Th><Th align="right">Unit price</Th>
-              <Th align="right">GST %</Th><Th align="right">Ordered</Th><Th align="right">Received</Th>
-              <Th align="right">Invoiced</Th><Th align="right">Remaining</Th>
+              <SortTh label="#" field="no" {...lt} /><SortTh label="Item code" field="code" {...lt} />
+              <SortTh label="Description" field="desc" {...lt} /><SortTh label="Unit" field="unit" {...lt} />
+              <SortTh label="Unit price" field="price" align="right" {...lt} /><SortTh label="GST %" field="gst" align="right" {...lt} />
+              <SortTh label="Ordered" field="ordered" align="right" {...lt} /><SortTh label="Received" field="received" align="right" {...lt} />
+              <SortTh label="Invoiced" field="invoiced" align="right" {...lt} /><SortTh label="Remaining" field="remaining" align="right" {...lt} />
             </tr>
           </THead>
           <tbody>
-            {po.lines.map((l) => (
+            {(lt.rows ?? []).map((l) => (
               <Tr key={l.id}>
                 <Td className="text-ink-3">{l.line_number}</Td>
                 <Td><Mono className="text-ink-2">{l.item_code ?? "—"}</Mono></Td>
@@ -111,10 +127,12 @@ export default function PODetailPage() {
           ) : (
             <Table>
               <THead>
-                <tr><Th>GRN</Th><Th>Received</Th><Th>Received by</Th><Th>Warehouse</Th><Th>Lines received</Th></tr>
+                <tr><SortTh label="GRN" field="grn" {...gt} /><SortTh label="Received" field="date" {...gt} />
+                  <SortTh label="Received by" field="by" {...gt} /><SortTh label="Warehouse" field="wh" {...gt} />
+                  <SortTh label="Lines received" field="lines" {...gt} /></tr>
               </THead>
               <tbody>
-                {po.goods_receipts.map((g) => (
+                {(gt.rows ?? []).map((g) => (
                   <Tr key={g.grn_number}>
                     <Td><Mono>{g.grn_number}</Mono></Td>
                     <Td className="whitespace-nowrap text-ink-2">{date(g.received_date)}</Td>
@@ -142,10 +160,12 @@ export default function PODetailPage() {
           ) : (
             <Table>
               <THead>
-                <tr><Th>Reference</Th><Th>Invoice no.</Th><Th>Status</Th><Th align="right">Amount consumed</Th><Th>Consumption</Th></tr>
+                <tr><SortTh label="Reference" field="ref" {...it} /><SortTh label="Invoice no." field="no" {...it} />
+                  <SortTh label="Status" field="status" {...it} /><SortTh label="Amount consumed" field="amount" align="right" {...it} />
+                  <SortTh label="Consumption" field="cons" {...it} /></tr>
               </THead>
               <tbody>
-                {po.invoices.map((i) => (
+                {(it.rows ?? []).map((i) => (
                   <Tr key={`${i.id}-${i.consumption}`}>
                     <Td><Link href={`/invoices/${i.id}`} className="font-mono text-[12px] text-accent hover:underline">{i.reference}</Link></Td>
                     <Td><Mono className="text-ink-2">{i.invoice_number ?? "—"}</Mono></Td>

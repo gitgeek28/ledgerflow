@@ -8,7 +8,7 @@ import { Badge, ReasonChip } from "@/components/status/status";
 import { Button } from "@/components/ui/button";
 import { Segmented } from "@/components/ui/overlays";
 import { Card, EmptyState, ErrorState, Input, Select } from "@/components/ui/primitives";
-import { Pagination, SkeletonRows, Table, Td, Th, THead, Tr } from "@/components/ui/table";
+import { Pagination, SkeletonRows, SortTh, Table, Td, THead, Tr } from "@/components/ui/table";
 import { qs } from "@/lib/api/client";
 import { useAudit, useAuditActions } from "@/lib/api/hooks";
 import type { AuditEvent } from "@/lib/api/types";
@@ -62,10 +62,14 @@ export default function AuditPage() {
   const [actor, setActor] = React.useState<Actor>("ALL");
   const [action, setAction] = React.useState("");
   const [page, setPage] = React.useState(1);
-  React.useEffect(() => setPage(1), [q, actor, action]);
+  const [sort, setSort] = React.useState("occurred_at");
+  const [order, setOrder] = React.useState("desc");
+  React.useEffect(() => setPage(1), [q, actor, action, sort, order]);
+  const onSort = (f: string) => { if (f === sort) setOrder(order === "asc" ? "desc" : "asc"); else { setSort(f); setOrder(f === "occurred_at" ? "desc" : "asc"); } };
+  const sp = { sort, order, onSort };
 
   const filters = { q: q || undefined, actor_type: actor === "ALL" ? undefined : actor, action: action || undefined };
-  const { data, isLoading, isError, error, refetch } = useAudit({ ...filters, page });
+  const { data, isLoading, isError, error, refetch } = useAudit({ ...filters, page, sort, order });
   const { data: actions } = useAuditActions();
 
   return (
@@ -98,8 +102,10 @@ export default function AuditPage() {
             <Table>
               <THead>
                 <tr>
-                  <Th>Time</Th><Th>Actor</Th><Th>Action</Th><Th>Entity</Th><Th>Reason</Th><Th>Note</Th>
-                  <Th>Change</Th>
+                  <SortTh label="Time" field="occurred_at" {...sp} /><SortTh label="Actor" field="actor" {...sp} />
+                  <SortTh label="Action" field="action" {...sp} /><SortTh label="Entity" field="entity" {...sp} />
+                  <SortTh label="Reason" field="reason" {...sp} /><SortTh label="Note" field="note" {...sp} />
+                  <SortTh label="Change" field="change" {...sp} />
                 </tr>
               </THead>
               <tbody>
