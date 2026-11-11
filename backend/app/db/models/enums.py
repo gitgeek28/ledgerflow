@@ -1,0 +1,101 @@
+from enum import StrEnum
+
+
+class Role(StrEnum):
+    AP_ANALYST = "AP_ANALYST"
+    AP_MANAGER = "AP_MANAGER"
+    AUDITOR = "AUDITOR"
+
+
+class VendorStatus(StrEnum):
+    APPROVED = "APPROVED"
+    PENDING_ONBOARDING = "PENDING_ONBOARDING"
+    BLOCKED = "BLOCKED"
+
+
+class POStatus(StrEnum):
+    OPEN = "OPEN"
+    CLOSED = "CLOSED"
+    CANCELLED = "CANCELLED"
+
+
+class POType(StrEnum):
+    GOODS = "GOODS"
+    SERVICES = "SERVICES"
+
+
+class InvoiceStatus(StrEnum):
+    PROCESSING = "PROCESSING"
+    READY_FOR_APPROVAL = "READY_FOR_APPROVAL"
+    NEEDS_REVIEW = "NEEDS_REVIEW"
+    ON_HOLD = "ON_HOLD"
+    REJECTED = "REJECTED"
+    APPROVED = "APPROVED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+
+
+class RunStatus(StrEnum):
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+
+class RunTrigger(StrEnum):
+    UPLOAD = "UPLOAD"
+    RETRY = "RETRY"
+    REEVALUATION = "REEVALUATION"
+
+
+class Stage(StrEnum):
+    RECEIVED = "RECEIVED"
+    FILE_VALIDATION = "FILE_VALIDATION"
+    TEXT_EXTRACTION = "TEXT_EXTRACTION"
+    FIELD_EXTRACTION = "FIELD_EXTRACTION"
+    VENDOR_RESOLUTION = "VENDOR_RESOLUTION"
+    PO_MATCHING = "PO_MATCHING"
+    FINANCIAL_RECONCILIATION = "FINANCIAL_RECONCILIATION"
+    DUPLICATE_CHECK = "DUPLICATE_CHECK"
+    RISK_AND_POLICY_CHECKS = "RISK_AND_POLICY_CHECKS"
+    DECISION = "DECISION"
+
+
+STAGE_ORDER: list[Stage] = list(Stage)
+
+
+class Severity(StrEnum):
+    INFO = "INFO"
+    WARNING = "WARNING"
+    REVIEW = "REVIEW"
+    BLOCKER = "BLOCKER"
+
+
+class CheckStatus(StrEnum):
+    PASS = "PASS"
+    FAIL = "FAIL"
+    INDETERMINATE = "INDETERMINATE"
+
+
+class JobStatus(StrEnum):
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    DONE = "DONE"
+    FAILED = "FAILED"
+
+
+class ConsumptionStatus(StrEnum):
+    RESERVED = "RESERVED"
+    APPROVED = "APPROVED"
+    RELEASED = "RELEASED"
+
+
+class ActorType(StrEnum):
+    SYSTEM = "SYSTEM"
+    USER = "USER"
+
+
+class Priority(StrEnum):
+    HIGH = "HIGH"
+    NORMAL = "NORMAL"
+    LOW = "LOW"

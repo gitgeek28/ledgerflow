@@ -1,0 +1,43 @@
+[project]
+name = "ledgerflow-backend"
+version = "0.1.0"
+description = "LedgerFlow — intelligent accounts payable operations (backend)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "sqlalchemy>=2.0.36",
+  "psycopg[binary]>=3.2",
+  "alembic>=1.14",
+  "pydantic>=2.9",
+  "pydantic-settings>=2.6",
+  "python-multipart>=0.0.17",
+  "pymupdf>=1.25",
+  "pytesseract>=0.3.13",
+  "pillow>=11.0",
+  "rapidfuzz>=3.10",
+  "httpx>=0.28",
+  "structlog>=24.4",
+  "itsdangerous>=2.2",
+  "pyyaml>=6.0",
+  "reportlab>=4.2",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3", "pytest-asyncio>=0.24", "ruff>=0.8", "mypy>=1.13"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["B008", "E501"]
+
+[tool.uv]
+package = false
