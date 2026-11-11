@@ -33,7 +33,7 @@ def parse_amount(raw: str | None) -> Decimal | None:
         return None
     s = raw.strip()
     negative = s.startswith("(") and s.endswith(")")
-    s = re.sub(r"(?i)\b(inr|rs\.?|usd|eur)\b", "", s)
+    s = re.sub(r"(?i)\b(?:inr|usd|eur)\b|\brs\b\.?", "", s)
     s = s.replace("₹", "").replace(",", "").replace(" ", "").strip("()").strip()
     if s.endswith("-"):
         negative, s = True, s[:-1]

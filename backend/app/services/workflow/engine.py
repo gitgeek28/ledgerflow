@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 from app.core.logging import get_logger
 from app.db.base import utcnow
 from app.db.models import Invoice, InvoiceCheck, Policy, ProcessingRun
-from app.db.models.enums import STAGE_ORDER
+from app.db.models.enums import STAGE_LABELS, STAGE_ORDER
 from app.services import audit
 from app.services.checks import CheckResult
 from app.services.extraction.document import DocumentUnreadable, OCRUnavailable
@@ -93,7 +93,7 @@ def execute_run(db: Session, run_id: uuid.UUID, heartbeat: Callable[[], None] | 
     total_ms = 0
     for stage in stages:
         run.current_stage = stage
-        emit(db, run, stage, "STAGE_STARTED", "INFO", f"{stage.replace('_', ' ').title()} started")
+        emit(db, run, stage, "STAGE_STARTED", "INFO", f"{STAGE_LABELS[stage]} started")
         db.commit()
         started = time.perf_counter()
         try:

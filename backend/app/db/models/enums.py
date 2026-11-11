@@ -99,3 +99,11 @@ class Priority(StrEnum):
     HIGH = "HIGH"
     NORMAL = "NORMAL"
     LOW = "LOW"
+
+
+STAGE_LABELS = {
+    "RECEIVED": "Received", "FILE_VALIDATION": "File validation", "TEXT_EXTRACTION": "Text extraction",
+    "FIELD_EXTRACTION": "Field extraction", "VENDOR_RESOLUTION": "Vendor resolution", "PO_MATCHING": "PO matching",
+    "FINANCIAL_RECONCILIATION": "Financial reconciliation", "DUPLICATE_CHECK": "Duplicate check",
+    "RISK_AND_POLICY_CHECKS": "Risk and policy checks", "DECISION": "Decision",
+}

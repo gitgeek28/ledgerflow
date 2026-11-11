@@ -37,7 +37,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
-ignore = ["B008", "E501"]
+ignore = ["B008", "E501", "UP046"]
 
 [tool.uv]
 package = false
