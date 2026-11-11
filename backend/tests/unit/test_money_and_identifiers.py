@@ -5,7 +5,12 @@ import pytest
 from app.services.identifiers import gstin_check_char, is_valid_gstin, make_gstin
 from app.services.money import D, parse_amount, pct_delta, q2
 from app.services.redaction import mask_digits
-from app.services.text_norm import normalise_description, normalise_invoice_number, normalise_name, normalise_unit
+from app.services.text_norm import (
+    normalise_description,
+    normalise_invoice_number,
+    normalise_name,
+    normalise_unit,
+)
 
 
 @pytest.mark.parametrize("raw,expected", [

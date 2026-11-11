@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
@@ -50,6 +50,15 @@ class Settings(BaseSettings):
     # The buyer organisation (fictional) — used to tell "bill to" identifiers apart from the supplier's.
     buyer_name: str = "Kestrel Components Pvt Ltd"
     buyer_gstin: str = "27AAGCK4821M1Z8"
+
+    @field_validator("database_url")
+    @classmethod
+    def _psycopg_driver(cls, v: str) -> str:
+        # Hosting providers hand out postgres:// URLs; SQLAlchemy needs the explicit psycopg driver.
+        for prefix in ("postgres://", "postgresql://"):
+            if v.startswith(prefix):
+                return "postgresql+psycopg://" + v[len(prefix):]
+        return v
 
     @property
     def max_upload_bytes(self) -> int:

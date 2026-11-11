@@ -1,0 +1,36 @@
+# Render blueprint (https://render.com/docs/blueprint-spec). One-click: New > Blueprint > this repo.
+# The API runs the worker in-process (EMBEDDED_WORKER=true) to keep the deployment to two services.
+# Note: free instances have ephemeral disks; uploaded PDFs are lost on redeploy (metadata stays in Postgres).
+databases:
+  - name: ledgerflow-db
+    databaseName: ledgerflow
+    user: ledgerflow
+    plan: free
+services:
+  - type: web
+    name: ledgerflow-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase: { name: ledgerflow-db, property: connectionString }
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEMO_PASSWORD
+        value: ledgerflow-demo
+      - key: EMBEDDED_WORKER
+        value: "true"
+      - key: LLM_PROVIDER
+        value: none
+      - key: COOKIE_SECURE
+        value: "true"
+  - type: web
+    name: ledgerflow-web
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: BACKEND_URL
+        value: https://ledgerflow-api.onrender.com

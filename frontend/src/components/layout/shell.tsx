@@ -168,7 +168,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Button>
           )}
           <Tip content="API documentation (OpenAPI)" side="bottom">
-            <a href="http://localhost:8000/docs" target="_blank" rel="noreferrer"
+            <a href="/api/docs" target="_blank" rel="noreferrer"
               className="hidden h-8 w-8 items-center justify-center rounded-md text-ink-2 hover:bg-surface-3 sm:inline-flex" aria-label="API docs">
               <ScrollText className="size-4" />
             </a>

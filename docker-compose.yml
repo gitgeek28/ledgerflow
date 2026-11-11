@@ -1,0 +1,36 @@
+# Full stack in containers: `docker compose up --build` then open http://localhost:3000
+# Optional local LLM: `docker compose --profile llm up` and `docker compose exec ollama ollama pull llama3.2`
+services:
+  db:
+    image: postgres:16-alpine
+    environment: { POSTGRES_USER: ledgerflow, POSTGRES_PASSWORD: ledgerflow, POSTGRES_DB: ledgerflow }
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U ledgerflow"], interval: 3s, retries: 20 }
+  api:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    environment: &backend_env
+      DATABASE_URL: postgresql+psycopg://ledgerflow:ledgerflow@db:5432/ledgerflow
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-ledgerflow-demo}
+      STORAGE_DIR: /app/backend/storage
+      LLM_PROVIDER: ${LLM_PROVIDER:-none}
+      OLLAMA_URL: http://ollama:11434
+      CORS_ORIGINS: '["http://localhost:3000"]'
+    volumes: [docs:/app/backend/storage]
+    depends_on: { db: { condition: service_healthy } }
+    ports: ["8000:8000"]
+  worker:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    command: ["uv", "run", "--no-sync", "python", "-m", "app.workers.runner"]
+    environment: *backend_env
+    volumes: [docs:/app/backend/storage]
+    depends_on: [api]
+  web:
+    build: { context: ./frontend, args: { BACKEND_URL: "http://api:8000" } }
+    depends_on: [api]
+    ports: ["3000:3000"]
+  ollama:
+    image: ollama/ollama:0.5.4
+    profiles: [llm]
+    volumes: [ollama:/root/.ollama]
+volumes: { pgdata: {}, docs: {}, ollama: {} }

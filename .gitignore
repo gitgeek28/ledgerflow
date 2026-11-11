@@ -24,3 +24,8 @@ next-env.d.ts
 .DS_Store
 .idea/
 .vscode/
+
+# Test artefacts
+frontend/test-results/
+frontend/playwright-report/
+.next-build

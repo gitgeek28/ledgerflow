@@ -45,7 +45,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--llm", action="store_true")
     parser.add_argument("--keep-env", action="store_true")
-    args = parser.parse_args()
+    parser.parse_args()  # flags are read from sys.argv before imports (see top of module)
     cfg = Config(str(BACKEND_DIR / "alembic.ini"))
     cfg.set_main_option("script_location", str(BACKEND_DIR / "migrations"))
     cfg.set_main_option("sqlalchemy.url", os.environ["DATABASE_URL"])

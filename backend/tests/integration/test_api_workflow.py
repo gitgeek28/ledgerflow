@@ -207,11 +207,12 @@ def test_worker_lease_expiry_resumes_run(client):
 
 def test_concurrent_split_invoices_cannot_double_consume(client):
     """Two invoices each claiming the full remaining quantity of the same PO: only one may reserve it."""
-    from app.seed.fixtures import Doc, render_spec  # noqa: F401
-    from app.seed.scenarios import SPEC_BY_ID
     import dataclasses
     import tempfile
     from pathlib import Path
+
+    from app.seed.fixtures import Doc, render_spec  # noqa: F401
+    from app.seed.scenarios import SPEC_BY_ID
     h = login(client)
     base = SPEC_BY_ID["S04"]
     paths = []

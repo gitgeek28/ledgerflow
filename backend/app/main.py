@@ -29,7 +29,8 @@ async def lifespan(app: FastAPI):
         w.stop.set()
 
 
-app = FastAPI(title="LedgerFlow API", version="1.0.0", lifespan=lifespan,
+app = FastAPI(title="LedgerFlow API", version="1.0.0", lifespan=lifespan, docs_url="/api/docs",
+              openapi_url="/api/openapi.json", redoc_url=None,
               description="Intelligent accounts-payable operations: invoice PDF to explainable AP decision.")
 install_error_handlers(app)
 app.add_middleware(CORSMiddleware, allow_origins=get_settings().cors_origins, allow_credentials=True,
