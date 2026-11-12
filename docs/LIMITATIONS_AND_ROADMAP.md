@@ -18,9 +18,9 @@
 - **Demo auth** with a shared password, no SSO/MFA, coarse roles.
 - **Storage**: local filesystem by default; on hosts with ephemeral disks `STORAGE_BACKEND=db` keeps PDFs in
   Postgres (fine for demo volumes; object storage is the production choice).
-- **Deployment artefacts** (Dockerfiles, `docker-compose.yml`, `render.yaml`) are written and `docker compose
-  config` validates, but the images were not built or deployed on the build machine (no container runtime was
-  running). The verified path is the local setup in the README.
+- **Hosting** is free tier: the Render API sleeps when idle (about 50 s cold start) and runs the worker in-process
+  with one thread; Neon free compute scales to zero. `docker-compose.yml` was validated but not run locally (no
+  container runtime on the build machine); the deployed Docker image on Render is the verified container path.
 - No email ingestion, ERP integration or payment execution (out of scope by design).
 
 ## Next production steps

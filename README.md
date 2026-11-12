@@ -10,6 +10,20 @@ Built by **Devanshi** for the AI Solutions Analyst case study, problem statement
 processing, from PDF to decision)**. All companies, documents and records are synthetic. This is an independent
 case-study build, not a product of any company.
 
+## Live demo
+
+**https://ledgerflow-mauve.vercel.app**: sign in as any demo user with password `ledgerflow-demo`.
+
+| Part | Hosting |
+|---|---|
+| Web app (Next.js) | Vercel; `/api/*` is proxied to the backend so the session cookie stays first-party |
+| API + background worker (FastAPI, Tesseract OCR) | Render free web service, Docker, Singapore; worker runs in-process |
+| Database + stored PDFs | Neon Postgres (Singapore), pooled connection for the app, direct connection for migrations |
+
+The free Render instance sleeps after 15 minutes idle: open the site about a minute before a demo so the first
+request isn't a cold start. The local Llama fallback is not available on the hosted tier (`LLM_PROVIDER=none`);
+rules + OCR handle all catalogued scenarios.
+
 ## What it does
 
 | Stage | What actually happens |

@@ -15,6 +15,13 @@ No queue broker, no microservices; for this scope that is the correct default.
                                                      Document storage (local FS behind an interface)
 ```
 
+## Deployment
+
+Vercel (Next.js) → `/api/*` rewrite → Render (FastAPI + embedded worker, Docker with Tesseract) → Neon Postgres.
+PDFs are stored in Postgres (`STORAGE_BACKEND=db`) because the free Render disk is ephemeral. The app uses Neon's
+pooled endpoint with server-side prepared statements disabled; Alembic uses the direct endpoint
+(`DATABASE_URL_UNPOOLED`).
+
 ## Request and processing flow
 
 1. `POST /api/invoices` validates the file, computes SHA-256 and checks the unique hash (an exact duplicate is linked
