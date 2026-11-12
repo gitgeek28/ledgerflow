@@ -25,6 +25,10 @@ class Settings(BaseSettings):
 
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"])
     secret_key: str = "change-me-local-demo-secret"
+    # Key for bank-account fingerprints. Deliberately separate from SECRET_KEY: rotating the session secret
+    # must not invalidate stored fingerprints (that would raise false bank-change alarms). Rotating THIS key
+    # requires re-fingerprinting the vendor master.
+    fingerprint_key: str = "ledgerflow-demo-fingerprint-key"
     demo_password: str = "ledgerflow-demo"
     session_ttl_hours: int = 12
     cookie_secure: bool = False

@@ -33,3 +33,4 @@ frontend/playwright-report/
 # Local secrets (any .env variant except the example)
 .env.*
 !.env.example
+.vercel

@@ -58,3 +58,12 @@ def test_name_and_description_normalisation():
 def test_mask_digits_keeps_last_four_and_leaves_amounts():
     assert mask_digits("A/c No: 38881234567") == "A/c No: ••••4567"
     assert mask_digits("Total 3,30,872.00 qty 4819 3000") == "Total 3,30,872.00 qty 4819 3000"
+
+
+def test_bank_fingerprint_does_not_depend_on_session_secret(monkeypatch):
+    from app.core.config import get_settings
+    from app.services.identifiers import bank_fingerprint
+    before = bank_fingerprint("38881234567")
+    monkeypatch.setattr(get_settings(), "secret_key", "rotated-session-secret")
+    assert bank_fingerprint("38881234567") == before
+    assert bank_fingerprint("3888 1234 567") == before

@@ -38,7 +38,7 @@ def bank_fingerprint(account: str) -> str:
     IFSC (a public branch code) is stored and compared separately, so an unreadable IFSC cannot cause a false
     mismatch on its own."""
     msg = normalise_account(account).encode()
-    return hmac.new(get_settings().secret_key.encode(), msg, hashlib.sha256).hexdigest()
+    return hmac.new(get_settings().fingerprint_key.encode(), msg, hashlib.sha256).hexdigest()
 
 
 def mask_tax_id(tax_id: str | None) -> str | None:
