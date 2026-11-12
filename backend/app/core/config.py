@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     database_url: str = "postgresql+psycopg://ledgerflow:ledgerflow@localhost:5432/ledgerflow"
+    # Direct (non-pooled) URL for schema migrations when DATABASE_URL goes through a pooler such as Neon's.
+    database_url_unpooled: str | None = None
+    storage_backend: str = "local"  # "local" (STORAGE_DIR) | "db" (stored_documents table)
     storage_dir: Path = BACKEND_DIR / "storage"
     max_upload_mb: int = 20
     max_pages: int = 50
@@ -51,9 +54,11 @@ class Settings(BaseSettings):
     buyer_name: str = "Kestrel Components Pvt Ltd"
     buyer_gstin: str = "27AAGCK4821M1Z8"
 
-    @field_validator("database_url")
+    @field_validator("database_url", "database_url_unpooled")
     @classmethod
-    def _psycopg_driver(cls, v: str) -> str:
+    def _psycopg_driver(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
         # Hosting providers hand out postgres:// URLs; SQLAlchemy needs the explicit psycopg driver.
         for prefix in ("postgres://", "postgresql://"):
             if v.startswith(prefix):

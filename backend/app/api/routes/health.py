@@ -8,7 +8,7 @@ from app.core.config import get_settings
 from app.db.models import Job, Policy
 from app.db.session import SessionLocal
 from app.services.extraction.llm import OllamaClient
-from app.services.storage import LocalStorage
+from app.services.storage import get_storage
 
 router = APIRouter(tags=["health"])
 
@@ -36,14 +36,8 @@ def ready():
             }
     except Exception as exc:  # noqa: BLE001 - reported, not raised
         out["database_error"] = type(exc).__name__
-    try:
-        storage = LocalStorage()
-        probe = storage.base / ".probe"
-        probe.write_text("ok")
-        probe.unlink()
-        out["storage"] = True
-    except OSError:
-        pass
+    out["storage"] = get_storage().healthy()
+    out["storage_backend"] = s.storage_backend
     cmd = s.tesseract_cmd or shutil.which("tesseract")
     if cmd:
         try:

@@ -10,7 +10,9 @@ from app.db.base import Base
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-config.set_main_option("sqlalchemy.url", config.get_main_option("sqlalchemy.url") or get_settings().database_url)
+_settings = get_settings()
+config.set_main_option("sqlalchemy.url", config.get_main_option("sqlalchemy.url")
+                       or _settings.database_url_unpooled or _settings.database_url)
 target_metadata = Base.metadata
 
 

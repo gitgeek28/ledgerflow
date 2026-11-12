@@ -5,7 +5,7 @@ from datetime import date
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, File, Query, UploadFile
-from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from sqlalchemy import asc, case, desc, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
@@ -179,13 +179,13 @@ def get_invoice(invoice_id: uuid.UUID, db: Session = Depends(get_db), user: User
 @router.get("/{invoice_id}/document")
 def get_document(invoice_id: uuid.UUID, db: Session = Depends(get_db), _: User = Depends(current_user)):
     inv = _get(db, invoice_id)
-    path = get_storage().path(inv.storage_key)
-    if not path.exists():
-        raise NotFound("Stored document is missing.")
+    try:
+        data = get_storage().read(inv.storage_key)
+    except (FileNotFoundError, OSError) as exc:
+        raise NotFound("Stored document is missing.") from exc
     safe = inv.original_filename.replace('"', "")
-    return FileResponse(path, media_type="application/pdf",
-                        headers={"Content-Disposition": f'inline; filename="{safe}"',
-                                 "Cache-Control": "private, max-age=300"})
+    return Response(data, media_type="application/pdf",
+                    headers={"Content-Disposition": f'inline; filename="{safe}"', "Cache-Control": "private, max-age=300"})
 
 
 @router.get("/{invoice_id}/checks", response_model=list[api.CheckOut])

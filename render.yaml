@@ -1,36 +1,33 @@
-# Render blueprint (https://render.com/docs/blueprint-spec). One-click: New > Blueprint > this repo.
-# The API runs the worker in-process (EMBEDDED_WORKER=true) to keep the deployment to two services.
-# Note: free instances have ephemeral disks; uploaded PDFs are lost on redeploy (metadata stays in Postgres).
-databases:
-  - name: ledgerflow-db
-    databaseName: ledgerflow
-    user: ledgerflow
-    plan: free
+# Render blueprint for the LedgerFlow API (https://render.com/docs/blueprint-spec).
+# The frontend is deployed separately on Vercel; the database is Neon Postgres.
+# The worker runs inside the API process (EMBEDDED_WORKER=true) so the free plan needs only one service.
+# PDFs are stored in Postgres (STORAGE_BACKEND=db) because the free instance's disk is wiped on every deploy.
 services:
   - type: web
     name: ledgerflow-api
     runtime: docker
+    plan: free
+    region: singapore
     dockerfilePath: ./backend/Dockerfile
     dockerContext: .
     healthCheckPath: /api/health
+    autoDeploy: true
     envVars:
       - key: DATABASE_URL
-        fromDatabase: { name: ledgerflow-db, property: connectionString }
+        sync: false            # paste the Neon *pooled* connection string when Render asks
       - key: SECRET_KEY
         generateValue: true
       - key: DEMO_PASSWORD
         value: ledgerflow-demo
+      - key: STORAGE_BACKEND
+        value: db
       - key: EMBEDDED_WORKER
         value: "true"
+      - key: WORKER_CONCURRENCY
+        value: "1"
+      - key: WORKER_POLL_INTERVAL_S
+        value: "2"
       - key: LLM_PROVIDER
         value: none
       - key: COOKIE_SECURE
         value: "true"
-  - type: web
-    name: ledgerflow-web
-    runtime: docker
-    dockerfilePath: ./frontend/Dockerfile
-    dockerContext: ./frontend
-    envVars:
-      - key: BACKEND_URL
-        value: https://ledgerflow-api.onrender.com

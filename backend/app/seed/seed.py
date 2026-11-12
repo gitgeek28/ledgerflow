@@ -19,7 +19,7 @@ from app.services.money import q2
 from app.services.policy import PolicySettings, settings_to_json
 from app.services.text_norm import normalise_description
 
-TABLES = ["audit_events", "run_events", "jobs", "invoice_checks", "po_line_consumptions", "invoice_notes",
+TABLES = ["stored_documents", "audit_events", "run_events", "jobs", "invoice_checks", "po_line_consumptions", "invoice_notes",
           "invoice_lines", "processing_runs", "invoices", "intake_batches", "goods_receipt_lines",
           "goods_receipts", "po_lines", "purchase_orders", "policies", "vendors", "users"]
 

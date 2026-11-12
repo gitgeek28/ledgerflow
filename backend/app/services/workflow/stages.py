@@ -92,8 +92,8 @@ def _sync_header(inv: Invoice, ex: ExtractionResult) -> None:
 
 # ------------------------------------------------------------------------------------------------- stages
 def file_validation(ctx: RunContext) -> StageOutcome:
-    path = get_storage().path(ctx.invoice.storage_key)
-    info = validate_pdf(str(path))
+    with get_storage().local_path(ctx.invoice.storage_key) as path:
+        info = validate_pdf(str(path))
     ctx.invoice.page_count = info["page_count"]
     kb = ctx.invoice.file_size / 1024
     return StageOutcome(
@@ -103,8 +103,8 @@ def file_validation(ctx: RunContext) -> StageOutcome:
 
 
 def text_extraction(ctx: RunContext) -> StageOutcome:
-    path = get_storage().path(ctx.invoice.storage_key)
-    doc = load_document(str(path))
+    with get_storage().local_path(ctx.invoice.storage_key) as path:
+        doc = load_document(str(path))
     ctx.doc = doc
     stored = doc.to_json()
     for page in stored["pages"]:

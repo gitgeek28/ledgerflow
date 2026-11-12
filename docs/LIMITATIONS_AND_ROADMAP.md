@@ -16,7 +16,8 @@
   unmatched for review rather than allocated automatically.
 - **Single currency in practice.** Currency is checked but there is no FX conversion; a mismatch goes to review.
 - **Demo auth** with a shared password, no SSO/MFA, coarse roles.
-- **Storage** is the local filesystem behind an interface. On free hosting tiers it is ephemeral.
+- **Storage**: local filesystem by default; on hosts with ephemeral disks `STORAGE_BACKEND=db` keeps PDFs in
+  Postgres (fine for demo volumes; object storage is the production choice).
 - **Deployment artefacts** (Dockerfiles, `docker-compose.yml`, `render.yaml`) are written and `docker compose
   config` validates, but the images were not built or deployed on the build machine (no container runtime was
   running). The verified path is the local setup in the README.
