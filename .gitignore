@@ -34,7 +34,3 @@ frontend/playwright-report/
 .env.*
 !.env.example
 .vercel
-
-# Local-only documentation (kept on disk, not published)
-docs/
-demo/
